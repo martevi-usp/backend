@@ -1,16 +1,16 @@
 
-from typing import List
 
 from fastapi import APIRouter
+
 from martevi.schema import Item
 
 router = APIRouter(tags=["Item"])
 
 @router.get(
     '/items',
-    response_model=List[Item]
+    response_model=list[Item]
 )
-async def read_items() -> List[Item]:
+async def read_items() -> list[Item]:
     """
     List all Items
     """

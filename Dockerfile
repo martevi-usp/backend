@@ -3,7 +3,7 @@
 # martevi backend — FastAPI service.
 # Build contexts: this file is meant to be built with `context: ./backend`
 # (see ../docker-compose.yml). The actual Python project lives one level
-# down, in martevi/ (that's where fastapi-gen scaffolded it — pyproject.toml,
+# down, in src/ (that's where fastapi-gen scaffolded it — pyproject.toml,
 # main.py, and the importable `martevi` package all sit there).
 #
 # Two targets:
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-COPY martevi/ ./
+COPY src/ ./
 
 FROM base AS dev
 

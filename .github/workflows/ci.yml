@@ -7,7 +7,7 @@ on:
 
 defaults:
   run:
-    working-directory: martevi
+    working-directory: src
 
 jobs:
   lint-and-test:

@@ -2,20 +2,16 @@
 
 FastAPI service behind martevi's museum-provider adapter. Scaffolded with
 [fastapi-gen](https://pypi.org/project/fastapi-gene/); the actual Python
-project (pyproject.toml, `main.py`, the importable `martevi` package) lives
-in `martevi/`, one level below this repo root — that nesting is a
-fastapi-gen artifact, not a mistake, and the Docker/CI setup below accounts
-for it.
-
-See `../STEERING.md` and `../OVERVIEW.md` at the martevi root for product
-rules and the adapter architecture this service implements, and
-`../.claude/CLAUDE.md` for the devops steering (repo layout, ports, CI
-conventions) shared across all three martevi repos.
+project (`pyproject.toml`, `main.py`) lives in `src/`, one level below
+this repo root — that nesting is a fastapi-gen artifact, not a mistake. The
+importable `martevi` package itself lives in `src/martevi/`
+(src-layout, so it's never importable by accident — only through an actual
+install). The Docker/CI setup below accounts for both.
 
 ## Local development
 
 ```bash
-cd martevi
+cd src
 python3 -m venv ../.venv          # or reuse an existing one
 source ../.venv/bin/activate
 pip install -e ".[dev]"
@@ -52,7 +48,7 @@ docker run --rm -p 8000:8000 martevi-backend:dev
 
 In normal day-to-day work you won't run this directly — use
 `docker compose up` from the martevi root, which builds this with the `dev`
-target and bind-mounts `martevi/` for live reload.
+target and bind-mounts `src/` for live reload.
 
 ## CI
 

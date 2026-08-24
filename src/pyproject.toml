@@ -2,7 +2,6 @@
 name = "martevi"
 version = "0.1.0"
 description = "martevi backend — FastAPI service behind the museum-provider adapter"
-readme = "../README.md"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi[standard]>=0.141",
