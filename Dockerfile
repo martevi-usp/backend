@@ -31,6 +31,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY src/ ./
 
+# Argos Translate (ADR-0002): a fixed, non-home path so the same installed
+# models are readable regardless of which user ends up running the server
+# (dev runs as root; production switches to appuser below) — installed once
+# here, in the shared base layer, so dev/production don't each download
+# their own ~80MB-per-language-pair copy. This RUN needs network access (to
+# fetch the package index and model files); the point of doing it at build
+# time is that the *running container* never does.
+ENV ARGOS_PACKAGES_DIR=/opt/argos-translate/packages \
+    ARGOS_DEVICE_TYPE=cpu
+RUN pip install argostranslate>=1.11 && \
+    python scripts/install_translation_models.py && \
+    chmod -R a+rX /opt/argos-translate
+
 FROM base AS dev
 
 RUN pip install -e ".[dev]"

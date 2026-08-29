@@ -1,8 +1,11 @@
+import logging
 from typing import TypeVar
 
 from martevi.providers.base import MuseumProvider
 from martevi.schema import Artwork, ArtworkSummary
 from martevi.translation.base import Translator
+
+logger = logging.getLogger(__name__)
 
 TRANSLATABLE_FIELDS: tuple[str, ...] = ("title", "description", "medium", "culture")
 
@@ -33,5 +36,20 @@ class TranslatingProvider:
             if field not in type(model).model_fields:
                 continue
             value = getattr(model, field)
-            updates[field] = await self._translator.translate(value) if value is not None else None
+            if value is None:
+                updates[field] = None
+                continue
+            try:
+                updates[field] = await self._translator.translate(value)
+            except Exception:
+                # The translation backend is an unofficial, no-SLA dependency (see
+                # CHANGELOG.md) — one flaky call must not 500 the whole request. Fall
+                # back to the original, untranslated text instead.
+                logger.warning(
+                    "Translation failed for field %r on %r (provider=%r); using original text.",
+                    field,
+                    model.id,
+                    self.provider_id,
+                )
+                updates[field] = value
         return model.model_copy(update=updates)
