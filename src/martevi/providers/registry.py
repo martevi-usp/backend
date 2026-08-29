@@ -13,11 +13,12 @@ from martevi.providers.adapters import (
 )
 from martevi.providers.base import MuseumProvider
 from martevi.providers.translating import TranslatingProvider
-from martevi.translation import DeepTranslatorTranslator
+from martevi.translation import ArgosTranslator
 
 
 def build_registry(client: httpx.AsyncClient) -> dict[str, MuseumProvider]:
-    translator = DeepTranslatorTranslator()
+    translator = ArgosTranslator("en", "pt")  # outbound result fields
+    query_translator = ArgosTranslator("pt", "en")  # inbound queries
     adapters: list[MuseumProvider] = [
         MetProvider(client),
         AicProvider(client),

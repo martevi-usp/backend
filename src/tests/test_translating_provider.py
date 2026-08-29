@@ -1,37 +1,7 @@
+from conftest import FakeProvider, FakeTranslator
+
 from martevi.providers import MuseumProvider, TranslatingProvider
 from martevi.schema import Artwork, ArtworkSummary
-
-
-class FakeTranslator:
-    """Deterministic test double: prefixes text so tests can assert exactly what was translated."""
-
-    def __init__(self, prefix: str = "PT::") -> None:
-        self._prefix = prefix
-        self.calls: list[str] = []
-
-    async def translate(self, text: str) -> str:
-        self.calls.append(text)
-        return f"{self._prefix}{text}"
-
-
-class FakeProvider:
-    """In-memory MuseumProvider test double."""
-
-    def __init__(
-        self,
-        provider_id: str,
-        summaries: list[ArtworkSummary],
-        items: dict[str, Artwork],
-    ) -> None:
-        self.provider_id = provider_id
-        self._summaries = summaries
-        self._items = items
-
-    async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
-        return self._summaries[:limit]
-
-    async def get_item(self, external_id: str) -> Artwork | None:
-        return self._items.get(external_id)
 
 
 def _full_artwork() -> Artwork:
@@ -197,6 +167,24 @@ async def test_translating_provider_satisfies_museum_provider_protocol():
     translating = TranslatingProvider(provider, FakeTranslator())
 
     assert isinstance(translating, MuseumProvider)
+
+
+async def test_translate_failure_falls_back_to_original_text(caplog):
+    class FailingTranslator:
+        async def translate(self, text: str) -> str:
+            raise RuntimeError("backend unavailable")
+
+    original = _full_artwork()
+    provider = FakeProvider("met", [], {original.id: original})
+    translating = TranslatingProvider(provider, FailingTranslator())
+
+    with caplog.at_level("WARNING"):
+        result = await translating.get_item(original.id)
+
+    assert result is not None
+    assert result.title == original.title  # untranslated, not a 500
+    assert result.description == original.description
+    assert "Translation failed" in caplog.text
 
 
 async def test_double_wrapping_composes():

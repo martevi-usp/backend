@@ -8,7 +8,7 @@ dependencies = [
   "sqlalchemy>=2.0",
   "alembic>=1.19",
   "pydantic>=2.13",
-  "deep-translator>=1.11",
+  "argostranslate>=1.11",
   "httpx>=0.28",
 ]
 
