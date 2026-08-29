@@ -1,1 +1,1 @@
-from .item import router as item_router  # noqa: F401
+from .artworks import router as artworks_router  # noqa: F401
