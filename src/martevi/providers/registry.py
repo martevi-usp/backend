@@ -28,4 +28,7 @@ def build_registry(client: httpx.AsyncClient) -> dict[str, MuseumProvider]:
         SmithsonianProvider(client, api_key=os.environ.get("SMITHSONIAN_API_KEY") or "DEMO_KEY"),
         VamProvider(client),
     ]
-    return {adapter.provider_id: TranslatingProvider(adapter, translator) for adapter in adapters}
+    return {
+        adapter.provider_id: TranslatingProvider(adapter, translator, query_translator)
+        for adapter in adapters
+    }
