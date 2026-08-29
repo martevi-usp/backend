@@ -155,6 +155,51 @@ async def test_search_preserves_result_count_and_order():
     assert [r.id for r in results] == [first.id, second.id]
 
 
+async def test_search_translates_each_summary_independently():
+    first = ArtworkSummary(
+        id="met:1",
+        provider_id="met",
+        title="First",
+        date=None,
+        thumbnail_url=None,
+        height_cm=None,
+        width_cm=None,
+    )
+    second = ArtworkSummary(
+        id="met:2",
+        provider_id="met",
+        title="Second",
+        date=None,
+        thumbnail_url=None,
+        height_cm=None,
+        width_cm=None,
+    )
+    provider = FakeProvider("met", [first, second], {})
+    translating = TranslatingProvider(provider, FakeTranslator())
+
+    results = await translating.search("query", limit=20)
+
+    assert [r.title for r in results] == ["PT::First", "PT::Second"]
+
+
+async def test_search_only_translates_title_even_for_full_artwork_results():
+    # Met/Rijksmuseum's search() returns full Artwork objects (no lightweight summary
+    # endpoint exists) — search() must still only translate "title", since that's all
+    # ArtworkSummary (its contractual return type) ever exposes.
+    original = _full_artwork()
+    translator = FakeTranslator()
+    provider = FakeProvider("met", [original], {})
+    translating = TranslatingProvider(provider, translator)
+
+    results = await translating.search("wheat", limit=20)
+
+    assert results[0].title == f"PT::{original.title}"
+    assert results[0].description == original.description  # untouched, not translated
+    assert results[0].medium == original.medium
+    assert results[0].culture == original.culture
+    assert translator.calls == [original.title]  # never called for the other fields
+
+
 async def test_provider_id_delegates_to_wrapped_provider():
     provider = FakeProvider("met", [], {})
     translating = TranslatingProvider(provider, FakeTranslator())
