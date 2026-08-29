@@ -1,1 +1,1 @@
-from .item import Item  # noqa: F401
+from .artwork import Artwork, ArtworkSummary  # noqa: F401
