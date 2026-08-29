@@ -2,6 +2,20 @@ import asyncio
 from collections.abc import Awaitable, Iterable
 
 
+async def gather_ordered[T](
+    coros: Iterable[Awaitable[T]], *, max_concurrency: int = 10
+) -> list[T]:
+    """Bounded gather preserving order and never dropping results — for concurrent
+    work where every coroutine is expected to succeed (unlike gather_optional)."""
+    semaphore = asyncio.Semaphore(max_concurrency)
+
+    async def _run(coro: Awaitable[T]) -> T:
+        async with semaphore:
+            return await coro
+
+    return await asyncio.gather(*(_run(coro) for coro in coros))
+
+
 async def gather_optional[T](
     coros: Iterable[Awaitable[T | None]], *, max_concurrency: int = 10
 ) -> list[T]:
