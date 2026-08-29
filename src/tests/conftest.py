@@ -1,6 +1,11 @@
 import httpx
 import pytest
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
 
+from martevi.api import artworks_router
+from martevi.api.deps import get_registry
+from martevi.providers.base import MuseumProvider
 from martevi.schema import Artwork, ArtworkSummary
 
 
@@ -46,3 +51,17 @@ class FakeTranslator:
 async def async_client():
     async with httpx.AsyncClient() as client:
         yield client
+
+
+@pytest.fixture
+def make_test_client():
+    """Factory fixture: builds a TestClient for the /artworks router with the given
+    provider registry overriding the real get_registry dependency."""
+
+    def _make(registry: dict[str, MuseumProvider]) -> TestClient:
+        app = FastAPI()
+        app.include_router(artworks_router)
+        app.dependency_overrides[get_registry] = lambda: registry
+        return TestClient(app)
+
+    return _make
