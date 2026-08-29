@@ -17,13 +17,43 @@ T = TypeVar("T", bound=ArtworkSummary)
 class TranslatingProvider:
     """Decorates a MuseumProvider, translating only allowlisted free-text fields (GoF Decorator)."""
 
-    def __init__(self, provider: MuseumProvider, translator: Translator) -> None:
+    def __init__(
+        self,
+        provider: MuseumProvider,
+        translator: Translator,
+        query_translator: Translator | None = None,
+    ) -> None:
         self._provider = provider
         self._translator = translator
+        # Optional reverse-direction (target->source) translator for search queries —
+        # see search()'s zero-result retry. None means query translation is disabled,
+        # matching every existing two-arg construction of this class.
+        self._query_translator = query_translator
         self.provider_id = provider.provider_id
 
     async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
         summaries = await self._provider.search(query, limit)
+        if not summaries and self._query_translator is not None:
+            # Try the query as typed first (so "Van Gogh" isn't mangled); only fall
+            # back to a translated retry if that genuinely found nothing. Handles
+            # Portuguese search terms without a language-detection dependency.
+            try:
+                translated_query = await self._query_translator.translate(query)
+            except Exception as exc:
+                # Same reasoning as _translate_field below: the translation backend
+                # is an unofficial, no-SLA dependency — one flaky call must not 500
+                # the whole search. Fall back to the untranslated (already-empty)
+                # result rather than raising.
+                logger.warning(
+                    "Query translation failed for %r (provider=%r): %s: %s; using original query.",
+                    query,
+                    self.provider_id,
+                    type(exc).__name__,
+                    exc,
+                )
+                translated_query = query
+            if translated_query.strip().casefold() != query.strip().casefold():
+                summaries = await self._provider.search(translated_query, limit)
         # Only "title" ever reaches the frontend from search() (ArtworkSummary has no
         # description/medium/culture) — a couple of adapters (Met, Rijksmuseum) return
         # full Artwork objects internally since they have no lightweight summary

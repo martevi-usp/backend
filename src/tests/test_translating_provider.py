@@ -200,6 +200,88 @@ async def test_search_only_translates_title_even_for_full_artwork_results():
     assert translator.calls == [original.title]  # never called for the other fields
 
 
+class _QuerySensitiveProvider:
+    """Test double whose search() only returns results for one exact query string —
+    used to verify TranslatingProvider's translated-query retry."""
+
+    def __init__(self, provider_id: str, results_by_query: dict[str, list[ArtworkSummary]]) -> None:
+        self.provider_id = provider_id
+        self._results_by_query = results_by_query
+        self.search_calls: list[str] = []
+
+    async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
+        self.search_calls.append(query)
+        return self._results_by_query.get(query, [])
+
+    async def get_item(self, external_id: str) -> Artwork | None:
+        raise NotImplementedError
+
+
+class _MappingTranslator:
+    """Test double that translates exact strings via a lookup table, for testing
+    query translation (unlike FakeTranslator's fixed prefix)."""
+
+    def __init__(self, mapping: dict[str, str]) -> None:
+        self._mapping = mapping
+
+    async def translate(self, text: str) -> str:
+        return self._mapping.get(text, text)
+
+
+async def test_search_retries_with_translated_query_when_original_returns_nothing():
+    summary = _summary()
+    provider = _QuerySensitiveProvider("met", {"sunflowers": [summary]})
+    query_translator = _MappingTranslator({"girassóis": "sunflowers"})
+    translating = TranslatingProvider(provider, FakeTranslator(), query_translator)
+
+    results = await translating.search("girassóis", limit=20)
+
+    assert provider.search_calls == ["girassóis", "sunflowers"]
+    assert len(results) == 1
+    assert results[0].id == summary.id
+
+
+async def test_search_does_not_retry_when_original_query_already_returns_results():
+    summary = _summary()
+    provider = _QuerySensitiveProvider("met", {"wheat": [summary]})
+    query_translator = _MappingTranslator({"wheat": "should-not-be-used"})
+    translating = TranslatingProvider(provider, FakeTranslator(), query_translator)
+
+    await translating.search("wheat", limit=20)
+
+    assert provider.search_calls == ["wheat"]
+
+
+async def test_search_does_not_retry_without_query_translator():
+    provider = _QuerySensitiveProvider("met", {})
+    translating = TranslatingProvider(provider, FakeTranslator())  # no query_translator
+
+    results = await translating.search("girassóis", limit=20)
+
+    assert results == []
+    assert provider.search_calls == ["girassóis"]
+
+
+class _FailingQueryTranslator:
+    """Test double whose translate() always raises — for testing that a flaky
+    query-translation call degrades to the raw (empty) result instead of a 500."""
+
+    async def translate(self, text: str) -> str:
+        raise RuntimeError("backend unavailable")
+
+
+async def test_search_query_translation_failure_falls_back_to_raw_result(caplog):
+    provider = _QuerySensitiveProvider("met", {"sunflowers": [_summary()]})
+    translating = TranslatingProvider(provider, FakeTranslator(), _FailingQueryTranslator())
+
+    with caplog.at_level("WARNING"):
+        results = await translating.search("girassóis", limit=20)
+
+    assert results == []  # not a 500, and no incorrect retry with garbage text
+    assert provider.search_calls == ["girassóis"]  # never retried — translation never resolved
+    assert "Query translation failed" in caplog.text
+
+
 async def test_provider_id_delegates_to_wrapped_provider():
     provider = FakeProvider("met", [], {})
     translating = TranslatingProvider(provider, FakeTranslator())
