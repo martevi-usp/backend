@@ -15,10 +15,7 @@ class TranslatingProvider:
     def __init__(self, provider: MuseumProvider, translator: Translator) -> None:
         self._provider = provider
         self._translator = translator
-
-    @property
-    def provider_id(self) -> str:
-        return self._provider.provider_id
+        self.provider_id = provider.provider_id
 
     async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
         summaries = await self._provider.search(query, limit)
