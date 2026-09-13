@@ -1,7 +1,9 @@
+import os
 from contextlib import asynccontextmanager
 
 import httpx
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from martevi.api import artworks_router
 from martevi.providers.registry import build_registry
@@ -19,5 +21,20 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# The frontend calls this API directly from the browser, so it needs CORS —
+# see CORS_ORIGINS in .env.example. GET-only since that's the whole surface.
+_cors_origins = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+    ).split(",")
+    if origin.strip()
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
 
 app.include_router(artworks_router)
