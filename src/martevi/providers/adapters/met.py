@@ -25,6 +25,22 @@ class MetProvider:
             (self.get_item(str(object_id)) for object_id in object_ids[:limit]),
         )
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # Met's curated, guaranteed-to-have-an-image highlight set (confirmed live:
+        # ~2,100 objects) — `q` is still required by the endpoint, but a common
+        # single letter combined with these two filters matches effectively all of
+        # it, same trick `search()`'s zero-result path never needs since a query is
+        # always given there. The full id list comes back in one call; slice for
+        # the page instead of a second network round-trip.
+        response = await self._client.get(
+            f"{_BASE}/search",
+            params={"q": "a", "isHighlight": "true", "hasImages": "true"},
+        )
+        response.raise_for_status()
+        object_ids = response.json().get("objectIDs") or []
+        page_ids = object_ids[offset : offset + limit]
+        return await gather_optional(self.get_item(str(object_id)) for object_id in page_ids)
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(f"{_BASE}/objects/{external_id}")
         if response.status_code == 404:

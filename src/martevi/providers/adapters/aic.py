@@ -28,6 +28,24 @@ class AicProvider:
         iiif_url = (payload.get("config") or {}).get("iiif_url")
         return [self._to_summary(item, iiif_url) for item in payload.get("data") or []]
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # AIC's plain /artworks listing is a real paginated "browse everything" —
+        # no query needed at all (unlike /artworks/search). It has no has-image
+        # filter param of its own, so items without one are dropped client-side.
+        page = offset // limit + 1 if limit else 1
+        response = await self._client.get(
+            f"{_BASE}/artworks",
+            params={"page": page, "limit": limit, "fields": _SEARCH_FIELDS},
+        )
+        response.raise_for_status()
+        payload = response.json()
+        iiif_url = (payload.get("config") or {}).get("iiif_url")
+        return [
+            self._to_summary(item, iiif_url)
+            for item in payload.get("data") or []
+            if item.get("image_id")
+        ]
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(
             f"{_BASE}/artworks/{external_id}", params={"fields": _ITEM_FIELDS}

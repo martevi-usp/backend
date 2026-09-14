@@ -25,6 +25,18 @@ class SmithsonianProvider:
         rows = (response.json().get("response") or {}).get("rows") or []
         return [self._to_artwork(row) for row in rows]
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # EDAN's `q` is required (empty/missing 400s) but a single common letter
+        # matches virtually the whole collection (confirmed live: ~2.8M rows) —
+        # `start` is EDAN's real, native offset, confirmed to shift the window.
+        response = await self._client.get(
+            f"{_BASE}/search",
+            params={"q": "a", "api_key": self._api_key, "rows": limit, "start": offset},
+        )
+        response.raise_for_status()
+        rows = (response.json().get("response") or {}).get("rows") or []
+        return [self._to_artwork(row) for row in rows]
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(
             f"{_BASE}/content/{external_id}", params={"api_key": self._api_key}

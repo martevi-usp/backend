@@ -29,6 +29,15 @@ class RijksmuseumProvider:
         external_ids = [item["id"].rsplit("/", 1)[-1] for item in items[:limit]]
         return await gather_optional(self.get_item(eid) for eid in external_ids)
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # The new Linked Art API paginates via opaque pageTokens in its response
+        # (`next`/`last` links), not a numeric offset, and a blank `title` matches
+        # nothing (confirmed live: 0 results) — not worth a bespoke cursor
+        # abstraction for one adapter. "de" (Dutch "the/of") matches ~206k objects,
+        # broad enough to browse; delegate to search() and reslice.
+        results = await self.search("de", limit=offset + limit)
+        return results[offset:]
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(
             f"{_RESOLVE_BASE}/{external_id}", params={"_profile": "edm-framed"}

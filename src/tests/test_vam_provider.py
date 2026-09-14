@@ -81,6 +81,27 @@ async def test_search_summaries_have_no_dimensions(respx_mock, async_client):
     assert results[0].width_cm is None
 
 
+async def test_browse_uses_images_exist_filter_and_computes_page(respx_mock, async_client):
+    payload = {
+        "records": [
+            {
+                "systemNumber": "O94917",
+                "_primaryTitle": "Teapot",
+                "_primaryImageId": "2006BG1640",
+            }
+        ]
+    }
+    route = respx_mock.get(_SEARCH_URL).mock(return_value=httpx.Response(200, json=payload))
+    provider = VamProvider(async_client)
+
+    results = await provider.browse(limit=20, offset=40)
+
+    assert len(results) == 1
+    assert route.calls.last.request.url.params["images_exist"] == "1"
+    assert route.calls.last.request.url.params["page"] == "3"
+    assert "q" not in route.calls.last.request.url.params
+
+
 async def test_search_summary_has_no_thumbnail_when_object_has_no_image_id():
     payload = {
         "records": [

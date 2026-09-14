@@ -282,6 +282,33 @@ async def test_search_query_translation_failure_falls_back_to_raw_result(caplog)
     assert "Query translation failed" in caplog.text
 
 
+async def test_browse_translates_titles_and_forwards_limit_and_offset():
+    first = ArtworkSummary(
+        id="met:1",
+        provider_id="met",
+        title="First",
+        date=None,
+        thumbnail_url=None,
+        height_cm=None,
+        width_cm=None,
+    )
+    second = ArtworkSummary(
+        id="met:2",
+        provider_id="met",
+        title="Second",
+        date=None,
+        thumbnail_url=None,
+        height_cm=None,
+        width_cm=None,
+    )
+    provider = FakeProvider("met", [first, second], {})
+    translating = TranslatingProvider(provider, FakeTranslator())
+
+    results = await translating.browse(limit=1, offset=1)
+
+    assert [r.title for r in results] == ["PT::Second"]
+
+
 async def test_provider_id_delegates_to_wrapped_provider():
     provider = FakeProvider("met", [], {})
     translating = TranslatingProvider(provider, FakeTranslator())

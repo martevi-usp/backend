@@ -55,3 +55,37 @@ async def test_search_fans_out_to_get_item_per_id(respx_mock, async_client):
 
     assert len(results) == 1
     assert results[0].id == "met:436535"
+
+
+async def test_browse_uses_highlight_and_has_images_filters(respx_mock, async_client):
+    route = respx_mock.get(_SEARCH_URL).mock(
+        return_value=httpx.Response(200, json={"total": 1, "objectIDs": [436535]})
+    )
+    respx_mock.get(_OBJECT_URL).mock(return_value=httpx.Response(200, json=_OBJECT))
+    provider = MetProvider(async_client)
+
+    results = await provider.browse(limit=20, offset=0)
+
+    assert len(results) == 1
+    assert route.calls.last.request.url.params["isHighlight"] == "true"
+    assert route.calls.last.request.url.params["hasImages"] == "true"
+
+
+async def test_browse_slices_the_id_list_by_offset_before_fetching(respx_mock, async_client):
+    object_ids = list(range(100000, 100010))  # 10 ids
+    respx_mock.get(_SEARCH_URL).mock(
+        return_value=httpx.Response(200, json={"total": 10, "objectIDs": object_ids})
+    )
+    fetched_ids: list[str] = []
+
+    def _respond(request: httpx.Request) -> httpx.Response:
+        external_id = request.url.path.rsplit("/", 1)[-1]
+        fetched_ids.append(external_id)
+        return httpx.Response(200, json={**_OBJECT, "objectID": int(external_id)})
+
+    respx_mock.get(url__regex=r".*/objects/\d+$").mock(side_effect=_respond)
+    provider = MetProvider(async_client)
+
+    await provider.browse(limit=3, offset=5)
+
+    assert fetched_ids == [str(i) for i in object_ids[5:8]]

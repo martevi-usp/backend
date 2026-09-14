@@ -71,3 +71,17 @@ async def test_search_returns_full_objects_inline(respx_mock, async_client):
 
     assert len(results) == 1
     assert results[0].id == "cleveland:130707"
+
+
+async def test_browse_uses_has_image_filter_and_native_skip_offset(respx_mock, async_client):
+    route = respx_mock.get(_SEARCH_URL).mock(
+        return_value=httpx.Response(200, json={"data": [_ARTWORK]})
+    )
+    provider = ClevelandProvider(async_client)
+
+    results = await provider.browse(limit=20, offset=40)
+
+    assert len(results) == 1
+    assert route.calls.last.request.url.params["has_image"] == "1"
+    assert route.calls.last.request.url.params["skip"] == "40"
+    assert "q" not in route.calls.last.request.url.params

@@ -33,6 +33,11 @@ class FakeProvider:
     async def get_item(self, external_id: str) -> Artwork | None:
         return self._items.get(external_id)
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        if self._error is not None:
+            raise self._error
+        return self._summaries[offset : offset + limit]
+
 
 class FakeTranslator:
     """Deterministic test double: prefixes text so tests can assert exactly what was
