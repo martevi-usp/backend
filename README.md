@@ -106,6 +106,23 @@ rather than "it failed":
 }
 ```
 
+### Search across every museum, streamed (SSE)
+
+`GET /artworks/stream?q=<query>&limit=<n>` — same fan-out as above, but
+each provider's outcome is pushed as its own Server-Sent Event as soon as
+that provider responds, instead of waiting for the slowest one (see
+ADR-0003). `provider_id`/`department` aren't supported here — this is the
+fan-out-only path.
+
+```ts
+const source = new EventSource(`${API_URL}/artworks/stream?q=sunflowers`);
+source.addEventListener("provider", (event) => {
+  const { provider_id, ok, count, error, results } = JSON.parse(event.data);
+  // append `results` to the grid as each provider arrives
+});
+source.addEventListener("done", () => source.close());
+```
+
 ### Filter by department (one museum at a time)
 
 `department` is only valid together with `provider_id` — a department only

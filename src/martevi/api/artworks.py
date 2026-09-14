@@ -1,9 +1,13 @@
+import json
+from collections.abc import AsyncIterator
+
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import StreamingResponse
 
 from martevi.api.deps import get_registry
 from martevi.providers._internal.concurrency import gather_optional
 from martevi.providers.base import MuseumProvider
-from martevi.providers.fanout import fan_out_search
+from martevi.providers.fanout import fan_out_search, stream_fan_out_search
 from martevi.schema import Artwork, ArtworkSummary, FanOutSearchResult, ProviderSearchStatus
 
 router = APIRouter(prefix="/artworks", tags=["artworks"])
@@ -43,6 +47,31 @@ async def search_artworks(
 
     status = ProviderSearchStatus(provider_id=provider_id, ok=True, count=len(results))
     return FanOutSearchResult(results=results, provider_status=[status])
+
+
+@router.get("/stream")
+async def stream_search_artworks(
+    q: str = Query(..., min_length=1),
+    limit: int = Query(20, ge=1, le=100),
+    registry: dict[str, MuseumProvider] = Depends(get_registry),
+) -> StreamingResponse:
+    """Cross-museum search over SSE: emits one 'provider' event per provider
+    as it finishes (in completion order), then a trailing 'done' event so the
+    client can distinguish "no more providers" from "still waiting"."""
+
+    async def events() -> AsyncIterator[str]:
+        async for status, results in stream_fan_out_search(registry, q, limit):
+            payload = {
+                "provider_id": status.provider_id,
+                "ok": status.ok,
+                "count": status.count,
+                "error": status.error,
+                "results": [r.model_dump(mode="json") for r in results],
+            }
+            yield f"event: provider\ndata: {json.dumps(payload)}\n\n"
+        yield "event: done\ndata: {}\n\n"
+
+    return StreamingResponse(events(), media_type="text/event-stream")
 
 
 async def _search_filtered_by_department(
