@@ -1,3 +1,5 @@
+import asyncio
+
 import httpx
 import pytest
 from fastapi import FastAPI
@@ -19,13 +21,17 @@ class FakeProvider:
         summaries: list[ArtworkSummary] | None = None,
         items: dict[str, Artwork] | None = None,
         error: Exception | None = None,
+        delay: float = 0,
     ) -> None:
         self.provider_id = provider_id
         self._summaries = summaries or []
         self._items = items or {}
         self._error = error
+        self._delay = delay
 
     async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
+        if self._delay:
+            await asyncio.sleep(self._delay)
         if self._error is not None:
             raise self._error
         return self._summaries[:limit]

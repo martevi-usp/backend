@@ -1,6 +1,21 @@
+import json
+
 from conftest import FakeProvider
 
 from martevi.schema import Artwork, ArtworkSummary
+
+
+def _parse_sse(body: str) -> list[tuple[str, dict]]:
+    """Splits a raw SSE response body into (event, parsed-json-data) pairs."""
+    events = []
+    for frame in body.strip().split("\n\n"):
+        if not frame:
+            continue
+        lines = frame.splitlines()
+        event = next(line.removeprefix("event: ") for line in lines if line.startswith("event: "))
+        data = next(line.removeprefix("data: ") for line in lines if line.startswith("data: "))
+        events.append((event, json.loads(data)))
+    return events
 
 
 def _artwork(provider_id: str, external_id: str, department: str | None = None) -> Artwork:
@@ -176,3 +191,54 @@ def test_browse_with_department_400(make_test_client):
     )
 
     assert response.status_code == 400
+
+
+def test_stream_emits_one_provider_event_per_provider_then_done(make_test_client):
+    met_artwork = _artwork("met", "1")
+    aic_artwork = _artwork("aic", "2")
+    registry = {
+        "met": FakeProvider("met", summaries=[_summary_of(met_artwork)]),
+        "aic": FakeProvider("aic", summaries=[_summary_of(aic_artwork)]),
+    }
+    client = make_test_client(registry)
+
+    response = client.get("/artworks/stream", params={"q": "test"})
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/event-stream")
+    events = _parse_sse(response.text)
+
+    assert [event for event, _ in events] == ["provider", "provider", "done"]
+    provider_ids = {data["provider_id"] for event, data in events if event == "provider"}
+    assert provider_ids == {"met", "aic"}
+    for event, data in events:
+        if event == "provider":
+            assert data["ok"] is True
+            assert data["count"] == 1
+            assert len(data["results"]) == 1
+
+
+def test_stream_reports_a_failing_provider_without_dropping_others(make_test_client):
+    registry = {
+        "met": FakeProvider("met", summaries=[_summary_of(_artwork("met", "1"))]),
+        "aic": FakeProvider("aic", error=RuntimeError("boom")),
+    }
+    client = make_test_client(registry)
+
+    response = client.get("/artworks/stream", params={"q": "test"})
+
+    events = _parse_sse(response.text)
+    provider_events = {data["provider_id"]: data for event, data in events if event == "provider"}
+
+    assert provider_events["met"]["ok"] is True
+    assert provider_events["aic"]["ok"] is False
+    assert provider_events["aic"]["error"] == "boom"
+    assert [event for event, _ in events][-1] == "done"
+
+
+def test_stream_requires_q(make_test_client):
+    client = make_test_client({})
+
+    response = client.get("/artworks/stream")
+
+    assert response.status_code == 422
