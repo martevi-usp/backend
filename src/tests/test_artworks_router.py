@@ -129,3 +129,50 @@ def test_department_filter_narrows_results(make_test_client):
     assert response.status_code == 200
     body = response.json()
     assert [r["id"] for r in body["results"]] == ["met:1"]
+
+
+def test_browse_single_provider_when_q_omitted(make_test_client):
+    artworks = [_artwork("met", str(i)) for i in range(5)]
+    registry = {"met": FakeProvider("met", summaries=[_summary_of(a) for a in artworks])}
+    client = make_test_client(registry)
+
+    response = client.get("/artworks", params={"provider_id": "met", "limit": 3})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [r["id"] for r in body["results"]] == ["met:0", "met:1", "met:2"]
+    assert body["provider_status"] == [
+        {"provider_id": "met", "ok": True, "count": 3, "error": None}
+    ]
+
+
+def test_browse_honors_offset(make_test_client):
+    artworks = [_artwork("met", str(i)) for i in range(5)]
+    registry = {"met": FakeProvider("met", summaries=[_summary_of(a) for a in artworks])}
+    client = make_test_client(registry)
+
+    response = client.get(
+        "/artworks", params={"provider_id": "met", "limit": 2, "offset": 3}
+    )
+
+    assert response.status_code == 200
+    assert [r["id"] for r in response.json()["results"]] == ["met:3", "met:4"]
+
+
+def test_browse_without_provider_id_400(make_test_client):
+    client = make_test_client({})
+
+    response = client.get("/artworks")
+
+    assert response.status_code == 400
+
+
+def test_browse_with_department_400(make_test_client):
+    registry = {"met": FakeProvider("met", summaries=[])}
+    client = make_test_client(registry)
+
+    response = client.get(
+        "/artworks", params={"provider_id": "met", "department": "Paintings"}
+    )
+
+    assert response.status_code == 400

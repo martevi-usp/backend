@@ -31,6 +31,13 @@ class HarvardProvider:
         response.raise_for_status()
         return [self._to_artwork(item) for item in response.json().get("records") or []]
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # No confirmed native offset for this adapter (untestable without a working
+        # API key), so delegate to search() with a broad keyword and reslice —
+        # correct, just costlier than a real offset for deep pages.
+        results = await self.search("a", limit=offset + limit)
+        return results[offset:]
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(
             f"{_BASE}/object/{external_id}", params={"apikey": self._api_key}

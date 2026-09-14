@@ -11,13 +11,16 @@ router = APIRouter(prefix="/artworks", tags=["artworks"])
 
 @router.get("", response_model=FanOutSearchResult)
 async def search_artworks(
-    q: str = Query(..., min_length=1),
+    q: str | None = Query(None, min_length=1),
     provider_id: str | None = Query(None),
     department: str | None = Query(None),
     limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
     registry: dict[str, MuseumProvider] = Depends(get_registry),
 ) -> FanOutSearchResult:
     if provider_id is None:
+        if q is None:
+            raise HTTPException(400, "q is required when provider_id is omitted")
         if department is not None:
             raise HTTPException(400, "department requires provider_id")
         return await fan_out_search(registry, q, limit)
@@ -26,7 +29,14 @@ async def search_artworks(
     if provider is None:
         raise HTTPException(404, f"Unknown provider_id: {provider_id!r}")
 
-    if department is None:
+    if q is None:
+        # Query-less browse — a page of the collection, shown before anyone
+        # searches. `department` filtering needs a search to filter, so it isn't
+        # supported in browse mode.
+        if department is not None:
+            raise HTTPException(400, "department requires q")
+        results = await provider.browse(limit, offset)
+    elif department is None:
         results = await provider.search(q, limit)
     else:
         results = await _search_filtered_by_department(provider, q, limit, department)

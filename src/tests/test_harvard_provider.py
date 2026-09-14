@@ -70,3 +70,17 @@ async def test_search_passes_fields_param_and_normalizes_records(respx_mock, asy
 
     assert len(results) == 1
     assert results[0].id == "harvard:304069"
+
+
+async def test_browse_delegates_to_search_and_reslices_by_offset(respx_mock, async_client):
+    # No confirmed native offset for this adapter — browse() delegates to
+    # search() with a broad keyword and reslices client-side (see browse()'s
+    # own docstring/comment). One record isn't enough to prove reslicing works,
+    # so just confirm it forwards to the same search endpoint and doesn't error
+    # when offset exceeds the result count.
+    respx_mock.get(_SEARCH_URL).mock(return_value=httpx.Response(200, json={"records": [_OBJECT]}))
+    provider = HarvardProvider(async_client, api_key="test-key")
+
+    results = await provider.browse(limit=10, offset=5)
+
+    assert results == []  # only 1 record exists; offset=5 is past the end

@@ -75,3 +75,24 @@ async def test_search_extracts_numeric_id_and_fans_out(respx_mock, async_client)
 
     assert len(results) == 1
     assert results[0].id == "rijksmuseum:200105339"
+
+
+async def test_browse_delegates_to_search_with_a_broad_dutch_term(respx_mock, async_client):
+    # No numeric offset in the new Linked Art API (opaque pageTokens only, see
+    # browse()'s comment) — delegates to search() with "de" (Dutch "the/of",
+    # broad enough to browse) and reslices client-side.
+    payload = {
+        "orderedItems": [
+            {"id": "https://id.rijksmuseum.nl/200105339", "type": "HumanMadeObject"},
+        ]
+    }
+    search_route = respx_mock.get(_SEARCH_URL).mock(return_value=httpx.Response(200, json=payload))
+    respx_mock.get(_RESOLVE_URL, params={"_profile": "edm-framed"}).mock(
+        return_value=httpx.Response(200, json=_RESOLVED)
+    )
+    provider = RijksmuseumProvider(async_client)
+
+    results = await provider.browse(limit=20, offset=0)
+
+    assert len(results) == 1
+    assert search_route.calls.last.request.url.params["title"] == "de"

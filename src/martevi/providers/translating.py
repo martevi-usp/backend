@@ -65,6 +65,13 @@ class TranslatingProvider:
             max_concurrency=10,
         )
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        summaries = await self._provider.browse(limit, offset)
+        return await gather_ordered(
+            (self._translate(summary, fields=("title",)) for summary in summaries),
+            max_concurrency=10,
+        )
+
     async def get_item(self, external_id: str) -> Artwork | None:
         artwork = await self._provider.get_item(external_id)
         if artwork is None:

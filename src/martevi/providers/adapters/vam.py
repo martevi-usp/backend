@@ -21,6 +21,17 @@ class VamProvider:
         response.raise_for_status()
         return [self._to_summary(item) for item in response.json().get("records") or []]
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # V&A's search takes no query at all, and `images_exist` + page/page_size
+        # is a real, native filter+pagination — no client-side reslicing needed.
+        page = offset // limit + 1 if limit else 1
+        response = await self._client.get(
+            f"{_BASE}/objects/search",
+            params={"images_exist": 1, "page": page, "page_size": limit},
+        )
+        response.raise_for_status()
+        return [self._to_summary(item) for item in response.json().get("records") or []]
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(f"{_BASE}/museumobject/{external_id}")
         if response.status_code == 404:

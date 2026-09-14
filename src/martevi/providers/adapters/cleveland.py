@@ -19,6 +19,15 @@ class ClevelandProvider:
         response.raise_for_status()
         return [self._to_artwork(item) for item in response.json().get("data") or []]
 
+    async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
+        # Cleveland's plain /artworks/ listing needs no query at all, and takes a
+        # real has_image filter plus skip/limit offset pagination natively.
+        response = await self._client.get(
+            f"{_BASE}/artworks/", params={"has_image": 1, "skip": offset, "limit": limit}
+        )
+        response.raise_for_status()
+        return [self._to_artwork(item) for item in response.json().get("data") or []]
+
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(f"{_BASE}/artworks/{external_id}")
         if response.status_code == 404:

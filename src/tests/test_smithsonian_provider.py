@@ -87,3 +87,15 @@ async def test_search_returns_full_rows_and_uses_demo_key_fallback(respx_mock, a
 
     assert len(results) == 1
     assert results[0].id == "smithsonian:edanmdm:saam_1985.66.403_415"
+
+
+async def test_browse_uses_broad_query_and_native_start_offset(respx_mock, async_client):
+    payload = {"response": {"rows": [_RECORD]}}
+    route = respx_mock.get(_SEARCH_URL).mock(return_value=httpx.Response(200, json=payload))
+    provider = SmithsonianProvider(async_client, api_key="DEMO_KEY")
+
+    results = await provider.browse(limit=10, offset=20)
+
+    assert len(results) == 1
+    assert route.calls.last.request.url.params["start"] == "20"
+    assert route.calls.last.request.url.params["rows"] == "10"
