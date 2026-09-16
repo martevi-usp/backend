@@ -106,11 +106,19 @@ class SmithsonianProvider:
         image_url = next(
             (r.get("url") for r in resources if r.get("label") == "Screen Image"), None
         )
-        thumbnail_url = next(
-            (r.get("url") for r in resources if r.get("label") == "Thumbnail Image"),
-            media_items[0].get("thumbnail"),
+        # EDAN's own "Thumbnail Image" resource is a genuinely tiny crop
+        # (~150px) meant for a small icon, not a masonry grid card that can
+        # be 300px+ wide — using it as `thumbnail_url` made every Smithsonian
+        # card look blurry/pixelated. "Screen Image" (the same one used for
+        # `image_url`) is a much larger web-sized image and renders sharp at
+        # grid size; only fall back to the small thumbnail if that's all a
+        # record has.
+        thumbnail_url = (
+            image_url
+            or next((r.get("url") for r in resources if r.get("label") == "Thumbnail Image"), None)
+            or media_items[0].get("thumbnail")
         )
-        return image_url, (thumbnail_url or image_url)
+        return image_url, thumbnail_url
 
     @staticmethod
     def _iiif_manifest(media_items: list[dict]) -> str | None:
