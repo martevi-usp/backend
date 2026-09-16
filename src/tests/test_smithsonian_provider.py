@@ -54,6 +54,71 @@ async def test_get_item_parses_dimensions_and_builds_iiif_manifest(respx_mock, a
     assert artwork.culture is None  # indexedStructured.culture absent on this record
     assert artwork.image_url == "https://example.org/screen.jpg"
     assert artwork.image_zoom_url == "https://ids.si.edu/ids/manifest/SAAM-1985.66.403415_1"
+    # thumbnail_url prefers the same "Screen Image" as image_url — EDAN's own
+    # "Thumbnail Image" resource is a ~150px crop, too small for a masonry
+    # grid card, and made every Smithsonian result look blurry.
+    assert artwork.thumbnail_url == "https://example.org/screen.jpg"
+
+
+async def test_thumbnail_falls_back_to_thumbnail_image_without_a_screen_image(
+    respx_mock, async_client
+):
+    record = {
+        **_RECORD,
+        "content": {
+            **_RECORD["content"],
+            "descriptiveNonRepeating": {
+                **_RECORD["content"]["descriptiveNonRepeating"],
+                "online_media": {
+                    "media": [
+                        {
+                            "idsId": "SAAM-1985.66.403415_1",
+                            "thumbnail": "https://example.org/legacy-thumb.jpg",
+                            "resources": [
+                                {"label": "Thumbnail Image", "url": "https://example.org/thumb.jpg"},
+                            ],
+                        }
+                    ]
+                },
+            },
+        },
+    }
+    respx_mock.get(_ITEM_URL).mock(return_value=httpx.Response(200, json={"response": record}))
+    provider = SmithsonianProvider(async_client, api_key="DEMO_KEY")
+
+    artwork = await provider.get_item("edanmdm:saam_1985.66.403_415")
+
+    assert artwork is not None
+    assert artwork.image_url is None  # no "Screen Image" resource on this record
+    assert artwork.thumbnail_url == "https://example.org/thumb.jpg"
+
+
+async def test_thumbnail_falls_back_to_legacy_thumbnail_field_last(respx_mock, async_client):
+    record = {
+        **_RECORD,
+        "content": {
+            **_RECORD["content"],
+            "descriptiveNonRepeating": {
+                **_RECORD["content"]["descriptiveNonRepeating"],
+                "online_media": {
+                    "media": [
+                        {
+                            "idsId": "SAAM-1985.66.403415_1",
+                            "thumbnail": "https://example.org/legacy-thumb.jpg",
+                            "resources": [],
+                        }
+                    ]
+                },
+            },
+        },
+    }
+    respx_mock.get(_ITEM_URL).mock(return_value=httpx.Response(200, json={"response": record}))
+    provider = SmithsonianProvider(async_client, api_key="DEMO_KEY")
+
+    artwork = await provider.get_item("edanmdm:saam_1985.66.403_415")
+
+    assert artwork is not None
+    assert artwork.thumbnail_url == "https://example.org/legacy-thumb.jpg"
 
 
 async def test_get_item_absent_online_media_key_yields_none_image(respx_mock, async_client):
