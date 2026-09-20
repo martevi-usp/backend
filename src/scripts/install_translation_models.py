@@ -36,16 +36,12 @@ def main() -> None:
         downloaded_path = pkg.download()
         package.install_from_path(downloaded_path)
 
-    # Installing a package does NOT fetch its Stanza sentence-boundary-detector
-    # resources — Stanza only downloads those lazily, on first actual use, and
-    # it caches them (resources.json + model weights) under the package's own
-    # stanza/ subdirectory. Running one real translate() per direction here,
-    # while this build step still has network access, bakes that cache into
-    # the image so the running container's REUSE_RESOURCES patch (see
-    # martevi/translation/argos_translator.py) has something valid to reuse
-    # and never needs to fetch it itself.
+    # One real translate() per direction, while this build step still has
+    # network access: Argos's sentence-boundary detector (MiniSBD) fetches its
+    # model lazily on first use, so this bakes it into the image and lets the
+    # running container stay offline (ADR-0005).
     for source, target in LANGUAGE_PAIRS:
-        print(f"Warming up Stanza sentence-boundary-detector for {source} -> {target}...")
+        print(f"Warming up sentence-boundary-detector for {source} -> {target}...")
         sample = translate.translate("Sunflowers", source, target)
         print(f"  {source} -> {target} sample translation: {sample!r}")
 

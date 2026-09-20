@@ -8,7 +8,14 @@ dependencies = [
   "sqlalchemy>=2.0",
   "alembic>=1.19",
   "pydantic>=2.13",
-  "argostranslate>=1.11",
+  # argostranslate itself is installed with --no-deps (see Dockerfile and
+  # ADR-0005) because its declared deps pull in torch + CUDA; these are the
+  # runtime deps it actually needs.
+  "ctranslate2>=4.8",
+  "sentencepiece>=0.2",
+  "sacremoses>=0.1",
+  "minisbd>=0.9",
+  "packaging",
   "httpx>=0.28",
 ]
 
