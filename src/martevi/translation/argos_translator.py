@@ -1,43 +1,31 @@
 import asyncio
+import threading
 
 import argostranslate.translate as argos_translate
-import stanza
-from argostranslate import sbd as argos_sbd
 
 # Argos Translate has no pt-BR/pt-PT distinction — just "pt". Accepted as a
 # known simplification (same spirit as this project's other documented
 # approximations, e.g. EDAN's free-text dimensions) rather than a bug.
 
-# Argos's sentence-boundary-detector is Stanza, and Stanza's default
-# Pipeline(...) call hardcodes download_method=DOWNLOAD_RESOURCES — it always
-# tries to fetch resources.json from raw.githubusercontent.com, even when the
-# package (and that same resources.json) is already installed locally. That
-# breaks the whole point of ADR-0002 (zero network at request time), so this
-# patches Stanza to reuse whatever resources.json is already cached under the
-# installed package's own stanza/ subdirectory instead of re-fetching it.
-# REUSE_RESOURCES only *skips the fetch*, it doesn't relax the schema Stanza
-# expects — the cached file must already be a complete, current-schema
-# resources.json. install_translation_models.py guarantees that by running an
-# actual translate() in both directions (not just package.install_from_path,
-# which never touches Stanza) at Docker build time, while the network is
-# still available, before this patch is ever exercised against a sealed image.
-_original_lazy_pipeline = argos_sbd.StanzaSentencizer.lazy_pipeline
+# Argos builds each language pair's CTranslate2 model lazily on its first
+# translate() call, with no lock. Under a fan-out search dozens of to_thread
+# calls hit a cold pair at once, each builds its own copy of the model, and
+# the process peaked near 2 GB (measured in a 512 MB container: OOM-killed).
+# Serialising only the *first* call per pair loads each model exactly once;
+# everything after runs concurrently, since CTranslate2 releases the GIL.
+_load_lock = threading.Lock()
+_loaded: set[tuple[str, str]] = set()
 
 
-def _offline_lazy_pipeline(self: argos_sbd.StanzaSentencizer) -> stanza.Pipeline:
-    if self.stanza_pipeline is None:
-        self.stanza_pipeline = stanza.Pipeline(
-            lang=self.stanza_lang_code,
-            dir=str(self.pkg.package_path / "stanza"),
-            processors="tokenize",
-            use_gpu=False,
-            logging_level="WARNING",
-            download_method=stanza.DownloadMethod.REUSE_RESOURCES,
-        )
-    return self.stanza_pipeline
-
-
-argos_sbd.StanzaSentencizer.lazy_pipeline = _offline_lazy_pipeline
+def _translate_blocking(text: str, source: str, target: str) -> str:
+    pair = (source, target)
+    if pair not in _loaded:
+        with _load_lock:
+            if pair not in _loaded:
+                result = argos_translate.translate(text, source, target)
+                _loaded.add(pair)
+                return result
+    return argos_translate.translate(text, source, target)
 
 
 class ArgosTranslator:
@@ -74,7 +62,7 @@ class ArgosTranslator:
         # calls actually run in parallel (CTranslate2 releases the GIL during
         # the C++ inference itself, same as numpy).
         result = await asyncio.to_thread(
-            argos_translate.translate, text, self._source, self._target
+            _translate_blocking, text, self._source, self._target
         )
         self._cache[text] = result
         return result

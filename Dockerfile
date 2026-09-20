@@ -24,23 +24,30 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# System deps for building wheels (psycopg2 etc. once a DB driver is added).
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY src/ ./
 
-# Argos Translate (ADR-0002): a fixed, non-home path so the same installed
-# models are readable regardless of which user ends up running the server
-# (dev runs as root; production switches to appuser below) — installed once
-# here, in the shared base layer, so dev/production don't each download
-# their own ~80MB-per-language-pair copy. This RUN needs network access (to
-# fetch the package index and model files); the point of doing it at build
-# time is that the *running container* never does.
-ENV ARGOS_PACKAGES_DIR=/opt/argos-translate/packages \
-    ARGOS_DEVICE_TYPE=cpu
-RUN pip install argostranslate>=1.11 && \
+# Argos Translate (ADR-0002, ADR-0005): a fixed, non-home path so the same
+# installed models are readable regardless of which user ends up running the
+# server (dev runs as root; production switches to appuser below) — installed
+# once here, in the shared base layer. This RUN needs network access (package
+# index, model files, MiniSBD models); the point of doing it at build time is
+# that the *running container* never does.
+#
+# argostranslate is installed --no-deps: its declared deps pull in torch (and
+# on Linux the whole CUDA stack, 4+ GB) via stanza, which the default MiniSBD
+# sentence splitter never uses. The real runtime deps come from pyproject.toml;
+# ARGOS_CHUNK_TYPE=MINISBD is required: the published en/pt model packages
+# embed a Stanza tokenizer, which Argos would otherwise select. A stub
+# `stanza` satisfies argostranslate's unguarded `import stanza`.
+# Review this block on every argostranslate bump.
+ENV XDG_DATA_HOME=/opt/argos-translate/data \
+    ARGOS_PACKAGES_DIR=/opt/argos-translate/packages \
+    ARGOS_DEVICE_TYPE=cpu \
+    ARGOS_CHUNK_TYPE=MINISBD
+RUN pip install ctranslate2 sentencepiece sacremoses minisbd packaging && \
+    pip install --no-deps argostranslate==1.11.0 && \
+    mkdir -p "$(python -c 'import site; print(site.getsitepackages()[0])')/stanza" && \
+    echo "# stub: see ADR-0005" > "$(python -c 'import site; print(site.getsitepackages()[0])')/stanza/__init__.py" && \
     python scripts/install_translation_models.py && \
     chmod -R a+rX /opt/argos-translate
 
