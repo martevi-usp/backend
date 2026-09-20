@@ -1,0 +1,3 @@
+A tela foi comprada pelo governo austríaco direto da exposição, antes mesmo de estar totalmente terminada.
+
+Klimt pintou a obra logo depois de uma viagem a Ravena, na Itália, onde os mosaicos bizantinos cobertos de ouro das igrejas antigas o marcaram profundamente — daí a superfície em folha de ouro aplicada sobre boa parte da tela. Em 1908, o Ministério da Cultura austríaco comprou o quadro diretamente da mostra em que foi exibido, um gesto raro de reconhecimento oficial dado a um artista ainda em vida e cuja obra era considerada escandalosa por outros setores da sociedade vienense. Durante a Segunda Guerra Mundial, a obra foi escondida numa mina de sal nos Alpes austríacos junto com milhares de outras peças para escapar de bombardeios e de confisco.

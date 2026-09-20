@@ -1,0 +1,3 @@
+Quando foi exposto em 1857, o quadro foi visto por críticos conservadores como uma ameaça política, não como uma cena de campo.
+
+A catação de restos de colheita era um direito legal garantido aos mais pobres na França rural, mas pintar essas mulheres em escala monumental, poucos anos depois das revoluções de 1848 que haviam abalado boa parte da Europa, foi lido por parte da crítica como uma defesa perigosa da classe trabalhadora. Um jornal da época chegou a comparar as espigadoras às Fúrias da Revolução Francesa, temendo que a obra glorificasse os pobres além do que a ordem social permitia. Só depois da morte de Millet, em 1875, o quadro passou a ser visto como um clássico sereno, sem essa carga política que teve na estreia.

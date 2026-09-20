@@ -1,0 +1,3 @@
+Hiroshige morreu de cólera durante uma epidemia em Edo, no ano seguinte a esta gravura ter sido publicada, sem ver o efeito que ela teria na Europa.
+
+A obra faz parte de uma série de cem vistas famosas de Edo, feita já no fim da vida do artista, que morreu em 1858 durante um surto de cólera que matou dezenas de milhares de pessoas na cidade. Décadas depois, gravuras como essa chegaram a Paris junto com cerâmicas importadas e alimentaram uma onda de fascínio europeu pela arte japonesa conhecida como japonismo, que influenciou pintores como Monet, Degas e Van Gogh. Van Gogh chegou a copiar esta cena específica a óleo, quase traço por traço, incluindo os caracteres japoneses que emolduram a gravura original, como exercício de estudo.

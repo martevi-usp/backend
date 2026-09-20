@@ -5,8 +5,6 @@ description = "martevi backend — FastAPI service behind the museum-provider ad
 requires-python = ">=3.12"
 dependencies = [
   "fastapi[standard]>=0.141",
-  "sqlalchemy>=2.0",
-  "alembic>=1.19",
   "pydantic>=2.13",
   # argostranslate itself is installed with --no-deps (see Dockerfile and
   # ADR-0005) because its declared deps pull in torch + CUDA; these are the

@@ -1,0 +1,3 @@
+A composição achatada e vista de cima veio de uma grande exposição de gravuras japonesas que Cassatt visitou em Paris, poucos anos antes de pintar esta obra.
+
+Mary Cassatt era americana, mudou-se para Paris ainda jovem e foi convidada pessoalmente por Edgar Degas a expor com o grupo impressionista, um dos poucos espaços da época abertos a uma mulher estrangeira na cena artística parisiense oficialmente fechada às academias. Em 1890, uma grande mostra com centenas de xilogravuras japonesas no Palácio de Belas Artes de Paris causou forte impressão nela e em vários outros artistas do círculo impressionista; o ângulo alto e os padrões planos desta pintura, de 1893, vêm diretamente dessa influência recém-descoberta pelos pintores franceses.

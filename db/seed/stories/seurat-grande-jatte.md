@@ -1,0 +1,3 @@
+A obra foi exibida na última mostra do grupo impressionista, em 1886, e sua técnica dividiu o movimento ao meio.
+
+Seurat levou cerca de dois anos fazendo dezenas de estudos preparatórios em óleo e desenho antes de pintar a versão final, num processo quase científico incomum entre os impressionistas, que valorizavam a rapidez e a espontaneidade da pincelada direta diante da paisagem. Quando a obra foi exposta, colegas mais velhos como Camille Pissarro passaram a adotar a nova técnica por um tempo, enquanto Monet e Renoir se recusaram a expor ao lado dessa geração mais jovem — o episódio é considerado por historiadores o momento em que o pontilhismo se separou do impressionismo como movimento independente, batizado de neoimpressionismo.

@@ -1,0 +1,3 @@
+Foi a última grande obra que Manet expôs antes de morrer, pintada já com a saúde debilitada pela sífilis que o mataria um ano depois.
+
+O Folies-Bergère era um music hall parisiense real, e a modelo, uma garçonete chamada Suzon que de fato trabalhava lá, posou várias vezes no ateliê de Manet, que reconstruiu parte do bar para pintá-la com mais controle sobre a luz e a pose. A obra foi exibida no Salão oficial de Paris em 1882, a última vez que Manet apresentou um quadro em vida diante do público oficial que por tanto tempo o havia rejeitado. Ele morreu no ano seguinte, aos 51 anos, com a perna amputada dias antes por complicações da doença, sem nunca ter recebido em vida o reconhecimento institucional que buscou a carreira inteira.

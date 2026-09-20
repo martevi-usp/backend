@@ -1,0 +1,3 @@
+Por quase um século depois de pintado, o quadro foi praticamente esquecido — sua fama atual é, na maior parte, um fenômeno do século XX.
+
+Friedrich pintou a obra logo após as guerras napoleônicas, num momento de forte sentimento nacionalista alemão contra a ocupação francesa que durou anos no território germânico. A pintura permaneceu pouco conhecida durante décadas depois da morte do artista em 1840, até ser redescoberta por historiadores da arte já no início do século XX — inclusive apropriada, mais tarde, por propaganda nacionalista de formas que nada tinham a ver com a intenção original do pintor romântico. Hoje é uma das imagens mais reproduzidas do Romantismo europeu, e pertence à coleção da Kunsthalle de Hamburgo.

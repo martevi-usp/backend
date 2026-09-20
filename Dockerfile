@@ -51,16 +51,25 @@ RUN pip install ctranslate2 sentencepiece sacremoses minisbd packaging && \
     python scripts/install_translation_models.py && \
     chmod -R a+rX /opt/argos-translate
 
+# Curated content (ADR-0004): the schema + seed are not part of the installed
+# package, and the built database goes to /opt/martevi, not /app, because the
+# dev compose target bind-mounts ./backend/src over /app.
 FROM base AS dev
 
-RUN pip install -e ".[dev]"
+COPY db/ /build/db/
+RUN pip install -e ".[dev]" && \
+    python scripts/build_database.py --schema /build/db/schema.sql --seed /build/db/seed --out /opt/martevi/martevi.db && \
+    chmod -R a+rX /opt/martevi
 
 EXPOSE 8000
 CMD ["fastapi", "dev", "main.py", "--host", "0.0.0.0", "--port", "8000"]
 
 FROM base AS production
 
-RUN pip install .
+COPY db/ /build/db/
+RUN pip install . && \
+    python scripts/build_database.py --schema /build/db/schema.sql --seed /build/db/seed --out /opt/martevi/martevi.db && \
+    chmod -R a+rX /opt/martevi
 
 RUN useradd --create-home --uid 1000 appuser
 USER appuser

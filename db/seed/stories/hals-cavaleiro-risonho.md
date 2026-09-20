@@ -1,0 +1,3 @@
+O nome pelo qual o quadro é conhecido só surgiu no século XIX, mais de duzentos anos depois de ele ter sido pintado.
+
+A identidade do homem retratado nunca foi confirmada por documentos — provavelmente um comerciante têxtil rico de Haarlem, dado o traje caro bordado que usa, mas nem isso é certo. Em 1865, um leilão em Paris pelo quadro virou disputa pessoal entre dois colecionadores britânicos milionários, o Marquês de Hertford e o Barão Rothschild, que competiram publicamente até um preço recorde para a época. Décadas depois, ao ser exibido numa grande mostra em Londres em 1888, o apelido Cavaleiro Risonho pegou entre o público e a imprensa e ficou definitivo, embora o homem, tecnicamente, nem esteja rindo na pintura.

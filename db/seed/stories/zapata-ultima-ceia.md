@@ -1,0 +1,3 @@
+O quadro faz parte de uma série encomendada para substituir obras destruídas por um terremoto que arrasou Cusco décadas antes.
+
+Depois do terremoto de 1650, que destruiu boa parte da cidade colonial de Cusco, no atual Peru, boa parte da decoração da Catedral precisou ser refeita, e Marcos Zapata, um pintor mestiço formado dentro da tradição conhecida como Escola Cuzquenha, foi um dos artistas contratados para a reconstrução ao longo das décadas seguintes. Essa escola misturava convenções religiosas europeias trazidas pelos colonizadores com elementos andinos locais — incluindo, nesta obra, um prato de porquinho-da-índia assado servido no lugar do cordeiro pascal tradicional, e pães e frutas típicos da região andina em vez dos originais do Oriente Médio bíblico.

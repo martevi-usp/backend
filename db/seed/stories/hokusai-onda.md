@@ -1,0 +1,3 @@
+Hokusai tinha quase setenta anos e dívidas de jogo do neto para pagar quando criou esta gravura.
+
+A obra faz parte de uma série de trinta e seis vistas do monte Fuji, produzida numa época em que um pigmento importado, o azul da Prússia, tinha acabado de chegar ao Japão e permitiu impressões mais baratas e vibrantes em larga escala — antes disso, o azul profundo dependia de pigmentos vegetais caros e instáveis. O sucesso comercial foi tão grande que a xilogravura foi reimpressa repetidamente a partir do mesmo bloco de madeira original, o que hoje ajuda historiadores a datar exemplares diferentes pelo desgaste progressivo da matriz. Hokusai assinou a série já perto do fim da vida, dizendo em cartas que só começaria a pintar de verdade depois dos cem anos.

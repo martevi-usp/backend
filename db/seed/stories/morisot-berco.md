@@ -1,0 +1,3 @@
+Berthe Morisot foi uma das fundadoras do grupo impressionista, numa época em que mulheres nem podiam se matricular na escola oficial de belas artes de Paris.
+
+Ela expôs este quadro na primeira mostra independente do grupo, em 1874, ao lado de Monet, Renoir, Pissarro e Degas, sendo uma das únicas mulheres entre os fundadores. Como mulher da alta sociedade parisiense, Morisot não podia frequentar sozinha cafés, bailes ou ateliês públicos como faziam os colegas homens, o que limitava boa parte de seus temas ao ambiente doméstico — não por escolha artística, mas por restrição social real da época. Ainda assim, produziu mais de quatrocentas pinturas ao longo da carreira e expôs em quase todas as mostras impressionistas organizadas entre 1874 e 1886.
