@@ -1,6 +1,6 @@
 # ADR-0002: Offline Translation with Argos Translate
 
-**Status:** Accepted
+**Status:** Accepted; the Stanza patch and warm-up are amended by ADR-0005
 **Date:** 2026-09-13
 **Deciders:** martevi backend owner(s)
 
