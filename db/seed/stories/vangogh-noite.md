@@ -1,0 +1,3 @@
+Van Gogh pintou esta obra internado por vontade própria num hospício, depois de mutilar a própria orelha, e considerou o resultado um fracasso.
+
+A vista combina o que ele via da janela do quarto no asilo de Saint-Rémy-de-Provence com elementos inventados de memória, como o cipreste em primeiro plano e a aldeia ao fundo — não é um retrato fiel do lugar real. Em cartas ao irmão Theo, que o sustentava financeiramente e guardava suas telas, ele quase não menciona o quadro, tratando-o como um exercício menor perto de outras pinturas da mesma época que considerava mais bem-sucedidas. Van Gogh morreu menos de um ano depois de pintá-la, sem nunca ter vendido mais do que uma única obra em vida; o reconhecimento só veio décadas depois, já no século XX.

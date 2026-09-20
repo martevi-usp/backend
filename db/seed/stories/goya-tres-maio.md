@@ -1,0 +1,3 @@
+Goya só pintou a cena seis anos depois de ela ter acontecido de verdade, quando o rei que a encomendou nem estava mais no trono que a motivou.
+
+O quadro registra as execuções em massa de madrilenhos que se rebelaram contra a ocupação francesa em 1808, feitas por soldados de Napoleão na noite seguinte ao levante popular conhecido como o Dois de Maio. Goya propôs o tema ao governo espanhol restaurado em 1814, pedindo para eternizar os mais notáveis feitos daquela insurreição, num momento em que buscava se reaproximar da nova monarquia depois de ter servido a corte durante a ocupação francesa. A obra não foi exibida publicamente durante décadas depois de concluída e só ganhou o reconhecimento que tem hoje já na segunda metade do século XIX.

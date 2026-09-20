@@ -1,0 +1,3 @@
+O quadro fazia parte de uma série de seis pinturas sobre os meses do ano, encomendada por um mercador rico de Antuérpia — só cinco sobreviveram até hoje.
+
+Pieter Bruegel pintou a série em 1565 para a casa de campo do comerciante Niclaes Jonghelinck, num período de invernos excepcionalmente rigorosos na Europa, hoje associado a uma fase de resfriamento climático conhecida como Pequena Idade do Gelo. É considerada uma das primeiras paisagens europeias a retratar neve de forma realista, e não apenas como pano de fundo simbólico de uma cena religiosa. Depois da morte de Jonghelinck, a coleção foi confiscada como garantia de uma dívida e acabou nas mãos dos Habsburgo, que a levaram para Viena — onde a obra permanece até hoje, no Kunsthistorisches Museum.
