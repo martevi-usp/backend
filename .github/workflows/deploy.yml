@@ -1,0 +1,58 @@
+name: backend deploy
+
+# Deploys to Cloud Run after backend CI passes on main, or on demand. Runs the
+# same script as a manual deploy (deploy/cloud-run/deploy.sh). One-time setup
+# and the variables/secrets this needs: deploy/cloud-run/README.md.
+on:
+  workflow_run:
+    workflows: ["backend CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once, and never cancel one halfway through.
+concurrency:
+  group: backend-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write # keyless auth to Google Cloud (Workload Identity Federation)
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Deploy exactly the commit CI passed on.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to Cloud Run
+        env:
+          GCP_PROJECT: ${{ vars.GCP_PROJECT }}
+          REGION: ${{ vars.GCP_REGION }}
+          CORS_ORIGINS: ${{ vars.CORS_ORIGINS }}
+          HARVARD_API_KEY: ${{ secrets.HARVARD_API_KEY }}
+          SMITHSONIAN_API_KEY: ${{ secrets.SMITHSONIAN_API_KEY }}
+        run: ./deploy/cloud-run/deploy.sh
+
+      - name: Smoke test /health
+        env:
+          GCP_PROJECT: ${{ vars.GCP_PROJECT }}
+          REGION: ${{ vars.GCP_REGION }}
+        run: |
+          url=$(gcloud run services describe martevi-backend \
+            --project "$GCP_PROJECT" --region "${REGION:-us-central1}" \
+            --format 'value(status.url)')
+          curl --fail --silent --show-error --retry 5 --retry-delay 10 --retry-all-errors \
+            "$url/health"
