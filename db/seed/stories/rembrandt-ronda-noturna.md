@@ -1,0 +1,3 @@
+O quadro que vemos hoje é menor do que o original — pedaços foram cortados das quatro bordas em 1715.
+
+Rembrandt pintou a tela para decorar a sede de uma companhia de milicianos de Amsterdã, um retrato de grupo encomendado e pago pelos próprios milicianos retratados, cada um contribuindo conforme o destaque que queria ter na composição. Quando a obra foi transferida para a Prefeitura da cidade, tiras foram cortadas dos quatro lados só para caber entre duas portas — a composição original só é conhecida hoje por uma cópia de época que preservou as partes perdidas. Já no século XX, o quadro foi atacado por um homem com faca em 1911 e novamente em 1975, além de um ataque com ácido em 1990; hoje fica permanentemente atrás de vidro reforçado no Rijksmuseum.

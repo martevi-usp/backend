@@ -1,0 +1,242 @@
+# Puzzle catalog. Migrated from the frontend's src/components/artworks.ts.
+# Wall notes live in stories/<id>.md (first paragraph = lede, rest = body).
+
+[[puzzle]]
+id = "vermeer-leiteira"
+title = "A leiteira"
+credit = "Johannes Vermeer, c. 1660"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Johannes%20Vermeer%20-%20Het%20melkmeisje%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Barroco holandês (Século de Ouro)"
+pieces = 24
+
+[[puzzle]]
+id = "hokusai-onda"
+title = "A grande onda de Kanagawa"
+credit = "Katsushika Hokusai, c. 1831"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Tsunami%20by%20hokusai%2019th%20century.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Ukiyo-e"
+pieces = 24
+
+[[puzzle]]
+id = "bruegel-cacadores"
+title = "Caçadores na neve"
+credit = "Pieter Bruegel, o Velho, 1565"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Pieter%20Bruegel%20the%20Elder%20-%20Hunters%20in%20the%20Snow%20(Winter)%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Renascimento do Norte"
+pieces = 24
+
+[[puzzle]]
+id = "vangogh-noite"
+title = "A noite estrelada"
+credit = "Vincent van Gogh, 1889"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Van%20Gogh%20-%20Starry%20Night%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Pós-impressionismo"
+pieces = 24
+
+[[puzzle]]
+id = "rembrandt-ronda-noturna"
+title = "A ronda noturna"
+credit = "Rembrandt van Rijn, 1642"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Nightwatch%20by%20Rembrandt%20-%20Rijksmuseum.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Barroco holandês (Século de Ouro)"
+pieces = 24
+
+[[puzzle]]
+id = "velazquez-meninas"
+title = "As meninas"
+credit = "Diego Velázquez, 1656"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Las%20Meninas%2C%20by%20Diego%20Vel%C3%A1zquez%2C%20from%20Prado%20in%20Google%20Earth.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Barroco espanhol"
+pieces = 24
+
+[[puzzle]]
+id = "goya-tres-maio"
+title = "O três de maio de 1808"
+credit = "Francisco de Goya, 1814"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/El%20Tres%20de%20Mayo%2C%20by%20Francisco%20de%20Goya%2C%20from%20Prado%20in%20Google%20Earth.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Romantismo"
+pieces = 24
+
+[[puzzle]]
+id = "friedrich-caminhante"
+title = "O caminhante sobre o mar de névoa"
+credit = "Caspar David Friedrich, c. 1818"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Caspar%20David%20Friedrich%20-%20Wanderer%20above%20the%20sea%20of%20fog.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Romantismo alemão"
+pieces = 24
+
+[[puzzle]]
+id = "millet-espigadoras"
+title = "As espigadoras"
+credit = "Jean-François Millet, 1857"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Fran%C3%A7ois%20Millet%20-%20Gleaners%20-%20Google%20Art%20Project%202.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Realismo"
+pieces = 24
+
+[[puzzle]]
+id = "courbet-enterro-ornans"
+title = "Um enterro em Ornans"
+credit = "Gustave Courbet, 1849–50"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Gustave%20Courbet%20-%20A%20Burial%20at%20Ornans%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Realismo"
+pieces = 24
+
+[[puzzle]]
+id = "manet-bar-folies"
+title = "Um bar no Folies-Bergère"
+credit = "Édouard Manet, 1882"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Edouard%20Manet%2C%20A%20Bar%20at%20the%20Folies-Berg%C3%A8re.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Realismo (início do modernismo)"
+pieces = 24
+
+[[puzzle]]
+id = "monet-impressao-nascer-sol"
+title = "Impressão, nascer do sol"
+credit = "Claude Monet, 1872"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Monet%20-%20Impression%2C%20Sunrise.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Impressionismo"
+pieces = 24
+
+[[puzzle]]
+id = "morisot-berco"
+title = "O berço"
+credit = "Berthe Morisot, 1872"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Berthe%20Morisot%20-%20The%20Cradle%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Impressionismo"
+pieces = 24
+
+[[puzzle]]
+id = "cassatt-banho"
+title = "O banho da criança"
+credit = "Mary Cassatt, 1893"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Mary%20Cassatt%20-%20The%20Child's%20Bath%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Impressionismo"
+pieces = 24
+
+[[puzzle]]
+id = "seurat-grande-jatte"
+title = "Tarde de domingo na ilha da Grande Jatte"
+credit = "Georges Seurat, 1884–86"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Georges%20Seurat%20-%20A%20Sunday%20on%20La%20Grande%20Jatte%20--%201884%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Neoimpressionismo (pontilhismo)"
+pieces = 24
+
+[[puzzle]]
+id = "klimt-beijo"
+title = "O beijo"
+credit = "Gustav Klimt, 1907–08"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Kiss%20-%20Gustav%20Klimt%20-%20Google%20Cultural%20Institute.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Simbolismo / Art Nouveau"
+pieces = 24
+
+[[puzzle]]
+id = "bonheur-feira-cavalos"
+title = "A feira de cavalos"
+credit = "Rosa Bonheur, 1852–55"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/WLA%20metmuseum%20Rosa%20Bonheur%20The%20Horse%20Fair.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Realismo"
+pieces = 24
+
+[[puzzle]]
+id = "homer-corrente-golfo"
+title = "A corrente do golfo"
+credit = "Winslow Homer, 1899"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Winslow%20Homer%20-%20The%20Gulf%20Stream%20-%20Metropolitan%20Museum%20of%20Art.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Realismo americano"
+pieces = 24
+
+[[puzzle]]
+id = "hiroshige-chuva-shin-ohashi"
+title = "Chuva repentina sobre a ponte Shin-Ōhashi"
+credit = "Utagawa Hiroshige, 1857"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Hiroshige%2C%20Sudden%20shower%20over%20Shin-%C5%8Chashi%20bridge%20and%20Atake%2C%201857.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Ukiyo-e"
+pieces = 24
+
+[[puzzle]]
+id = "fankuan-viajantes"
+title = "Viajantes entre montanhas e riachos"
+credit = "Fan Kuan, dinastia Song, c. 1000"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Fan%20Kuan%20-%20Travelers%20Among%20Mountains%20and%20Streams%20-%20Google%20Art%20Project.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Pintura de paisagem da dinastia Song"
+pieces = 24
+
+[[puzzle]]
+id = "botticelli-nascimento-venus"
+title = "O nascimento de Vênus"
+credit = "Sandro Botticelli, c. 1485"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Sandro%20Botticelli%20-%20La%20nascita%20di%20Venere%20-%20Google%20Art%20Project%20-%20edited.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Renascimento inicial"
+pieces = 24
+
+[[puzzle]]
+id = "gentileschi-judite"
+title = "Judite decapitando Holofernes"
+credit = "Artemisia Gentileschi, c. 1612–13"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Artemisia%20Gentileschi%20-%20Judith%20Beheading%20Holofernes%20-%20WGA8563.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Barroco"
+pieces = 24
+
+[[puzzle]]
+id = "hals-cavaleiro-risonho"
+title = "O cavaleiro risonho"
+credit = "Frans Hals, 1624"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Frans%20Hals%20%E2%80%93%20The%20Laughing%20Cavalier.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Barroco holandês (Século de Ouro)"
+pieces = 24
+
+[[puzzle]]
+id = "zapata-ultima-ceia"
+title = "A última ceia"
+credit = "Marcos Zapata, c. 1753"
+src = "https://commons.wikimedia.org/wiki/Special:FilePath/Zapata-%C3%BAltima%20cena.jpg?width=1400"
+rights = "Domínio público (Wikimedia Commons)"
+verified = true
+movement = "Escola Cuzquenha (barroco andino colonial)"
+pieces = 24

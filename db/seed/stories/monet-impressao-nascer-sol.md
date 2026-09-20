@@ -1,0 +1,3 @@
+O quadro deu nome a um movimento inteiro por acidente, numa resenha que era pra ser um insulto.
+
+Monet expôs a obra em 1874 numa mostra organizada por um grupo de artistas repetidamente rejeitados pelo Salão oficial de Paris, reunidos numa sociedade cooperativa independente batizada apenas de Sociedade Anônima de Pintores. O crítico Louis Leroy escreveu uma resenha zombeteira num jornal parisiense, citando o título do quadro para chamar o grupo inteiro de impressionistas, como ofensa à falta de acabamento das telas. O nome pegou entre o público, os próprios artistas passaram a adotá-lo com orgulho nas mostras seguintes, e a exposição de 1874 é hoje considerada o marco fundador do movimento impressionista.

@@ -1,0 +1,222 @@
+# Curated virtual-tour links (ADR-0004), seeded from:
+#   - SME São Paulo, "30 museus virtuais para você visitar sem sair de casa"
+#     https://educacao.sme.prefeitura.sp.gov.br/noticias/30-museus-virtuais-para-voce-visitar-sem-sair-de-casa/
+#   - Google Arts & Culture, Museum Views
+#     https://artsandculture.google.com/project/streetviews?hl=pt-BR
+# Compiled from a third-party list: museums retire these pages constantly, so
+# re-check every URL before shipping.
+
+[[tour]]
+museum = "Pinacoteca do Estado de São Paulo"
+country = "Brazil"
+title = "Street View"
+url = "https://artsandculture.google.com/streetview/pinacoteca-do-estado-de-s%C3%A3o-paulo/ogFzI8ChtO96vg?hl=pt-BR&sv_lng=-46.6338008&sv_lat=-23.5343627&sv_h=35&sv_p=0&sv_pid=sw81l2mz7XZFfOK9pgCOag&sv_z=1.0000000000000002"
+
+[[tour]]
+museum = "Museu de Arte de São Paulo (MASP)"
+country = "Brazil"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/masp"
+
+[[tour]]
+museum = "Museu da Casa de Portinari"
+country = "Brazil"
+title = "Tour virtual"
+url = "http://www.museucasadeportinari.org.br/TOUR-VIRTUAL/"
+
+[[tour]]
+museum = "Instituto Inhotim"
+country = "Brazil"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/inhotim?hl=pt-br"
+
+[[tour]]
+museum = "Museu do Amanhã"
+country = "Brazil"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/museu-do-amanh%C3%A3"
+
+[[tour]]
+museum = "Museu Oscar Niemeyer"
+country = "Brazil"
+title = "Visita virtual 3D"
+url = "https://www.museuoscarniemeyer.org.br/visite/visita-virtual-3D"
+
+[[tour]]
+museum = "Museu Virtual de Brasília"
+country = "Brazil"
+title = "Museu virtual"
+url = "http://www.museuvirtualbrasilia.org.br/PT/"
+
+[[tour]]
+museum = "Museu do Louvre"
+country = "France"
+title = "Visitas online"
+url = "https://www.louvre.fr/en/visites-en-ligne"
+
+[[tour]]
+museum = "Palácio de Versalhes"
+country = "France"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/palace-of-versailles?hl=pt-BR"
+
+[[tour]]
+museum = "Museu d'Orsay"
+country = "France"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/musee-dorsay-paris?hl=fr"
+
+[[tour]]
+museum = "The Metropolitan Museum of Art"
+country = "United States"
+title = "Met 360 Project"
+url = "https://www.metmuseum.org/art/online-features/met-360-project"
+
+[[tour]]
+museum = "The Metropolitan Museum of Art"
+country = "United States"
+title = "Coleção online"
+url = "https://www.metmuseum.org/art/collection"
+
+[[tour]]
+museum = "The Metropolitan Museum of Art"
+country = "United States"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/the-metropolitan-museum-of-art"
+
+[[tour]]
+museum = "Museu Nacional de História Natural (Smithsonian)"
+country = "United States"
+title = "Tour virtual"
+url = "https://naturalhistory2.si.edu/vt3/NMNH/"
+
+[[tour]]
+museum = "Art Institute of Chicago"
+country = "United States"
+title = "Coleção online"
+url = "https://www.artic.edu/collection"
+
+[[tour]]
+museum = "Museu Nacional do Ar e do Espaço (Smithsonian)"
+country = "United States"
+title = "Site do museu"
+url = "https://airandspace.si.edu/"
+
+[[tour]]
+museum = "Museu de Arte Moderna (MoMA)"
+country = "United States"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/moma-the-museum-of-modern-art"
+
+[[tour]]
+museum = "Museu Nacional de Antropologia (México)"
+country = "Mexico"
+title = "Street View"
+url = "https://artsandculture.google.com/streetview/9QF3u2yNtD8ufQ?sv_lng=-99.1874967&sv_lat=19.4262021&sv_h=261.9837739797691&sv_p=-1.1648862483025795&sv_pid=vE0AANmrdjzJR19WXs9Z2w&sv_z=1.0000000000000002"
+
+[[tour]]
+museum = "Museu Frida Kahlo"
+country = "Mexico"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/museo-frida-kahlo"
+
+[[tour]]
+museum = "Museu Britânico"
+country = "United Kingdom"
+title = "Street View"
+url = "https://artsandculture.google.com/streetview/british-museum/AwEp68JO4NECkQ?sv_lng=-0.1266024509257022&sv_lat=51.51905368906714&sv_h=306&sv_p=0&sv_pid=JeKwUFYAMWXNWPh3IOg3jw&sv_z=1.0000000000000002"
+
+[[tour]]
+museum = "Capela Sistina"
+country = "Vatican City"
+title = "Visita virtual"
+url = "http://www.vatican.va/various/cappelle/index_sistina_en.htm"
+
+[[tour]]
+museum = "Galeria Uffizi"
+country = "Italy"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/story/cQVh5Rbqa2Q3dg"
+
+[[tour]]
+museum = "Casa de Anne Frank"
+country = "Netherlands"
+title = "Visita digital"
+url = "https://www.annefrank.org/en/museum/web-and-digital/"
+
+[[tour]]
+museum = "Museu Van Gogh"
+country = "Netherlands"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/van-gogh-museum"
+
+[[tour]]
+museum = "Rijksmuseum"
+country = "Netherlands"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/rijksmuseum"
+
+[[tour]]
+museum = "Museu da Acrópole"
+country = "Greece"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/acropolis-museum"
+
+[[tour]]
+museum = "Yad Vashem"
+country = "Israel"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/yad-vashem"
+
+[[tour]]
+museum = "Museu de Arte Ohara"
+country = "Japan"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/ohara-museum-of-art"
+
+[[tour]]
+museum = "Museu Nacional de Arte Moderna e Contemporânea (Coreia)"
+country = "South Korea"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/national-museum-of-modern-and-contemporary-art-korea?hl=fr"
+
+[[tour]]
+museum = "Museu Hermitage"
+country = "Russia"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/the-state-hermitage-museum"
+
+[[tour]]
+museum = "Museu Picasso de Barcelona"
+country = "Spain"
+title = "Site do museu"
+url = "http://www.museupicasso.bcn.cat/"
+
+[[tour]]
+museum = "Museu Reina Sofia"
+country = "Spain"
+title = "Google Arts & Culture"
+url = "https://artsandculture.google.com/partner/museo-reina-sofia"
+
+[[tour]]
+museum = "Google Arts & Culture"
+title = "Museum Views (todos os tours)"
+url = "https://artsandculture.google.com/project/streetviews?hl=pt-BR"
+
+[[tour]]
+museum = "Museu Mikhail Bulgákov"
+country = "Russia"
+title = "Street View"
+url = "https://artsandculture.google.com/streetview/mikhail-bulgakov-museum/sQFMSXyjKlbWHQ"
+
+[[tour]]
+museum = "Palácio Nacional de Sintra"
+country = "Portugal"
+title = "Street View"
+url = "https://artsandculture.google.com/streetview/pal%C3%81cio-nacional-de-sintra/UwG2LqZ2HJMOzw"
+
+[[tour]]
+museum = "Castelo de Vaux-le-Vicomte"
+country = "France"
+title = "Street View"
+url = "https://artsandculture.google.com/streetview/ch%C3%A2teau-de-vaux-le-vicomte/ZwFaqbI3Dq5fiw"

@@ -1,0 +1,3 @@
+O quadro sobreviveu a um incêndio que destruiu boa parte do palácio onde ficava pendurado.
+
+Velázquez pintou a cena para o próprio rei Filipe IV, que a manteve no seu escritório particular no Alcázar Real de Madri, longe dos olhos do público em geral. Em 1734, um incêndio destruiu grande parte do palácio e boa parte da coleção real reunida ao longo de gerações — a tela foi salva a tempo, ainda que hoje existam dúvidas sobre o quanto ela foi restaurada depois do episódio. Só foi exposta publicamente quase dois séculos depois da morte do pintor, quando o Museu do Prado abriu suas portas em 1819, reunindo pela primeira vez boa parte do acervo que antes só a corte via.

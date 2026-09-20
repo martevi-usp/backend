@@ -1,0 +1,3 @@
+Quando foi exibido em Paris em 1850, o tamanho do quadro foi visto como uma provocação: aquela escala era reservada a reis e batalhas, não a um funeral de aldeia.
+
+Courbet retratou o funeral de um tio-avô numa pequena cidade do interior francês, usando mais de quarenta moradores reais de Ornans como modelos, incluindo o padre, o coveiro e membros da própria família do pintor. A Academia de Belas Artes de Paris considerava esse tamanho de tela apropriado só para temas históricos, religiosos ou mitológicos nobres — pintar gente comum numa escala assim foi recebido como um ataque deliberado à hierarquia dos gêneros pictóricos que organizava a arte oficial francesa havia séculos. O escândalo consolidou Courbet como líder de um movimento que ele próprio batizou de Realismo.
