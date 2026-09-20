@@ -4,7 +4,7 @@
 #   GCP_PROJECT=my-project CORS_ORIGINS=https://my-frontend.workers.dev \
 #     ./deploy/cloud-run/deploy.sh
 #
-# Optional: REGION (default us-central1), SERVICE (default martevi-backend),
+# Optional: CORS_ORIGIN_REGEX (extra origins by pattern), REGION (default us-central1), SERVICE (default martevi-backend),
 # HARVARD_API_KEY, SMITHSONIAN_API_KEY.
 set -euo pipefail
 
@@ -16,6 +16,7 @@ SERVICE="${SERVICE:-martevi-backend}"
 # gcloud splits --set-env-vars on commas, and CORS_ORIGINS may contain some, so
 # use a custom delimiter (^@^).
 ENV_VARS="CORS_ORIGINS=${CORS_ORIGINS}"
+[ -n "${CORS_ORIGIN_REGEX:-}" ] && ENV_VARS="${ENV_VARS}@CORS_ORIGIN_REGEX=${CORS_ORIGIN_REGEX}"
 [ -n "${HARVARD_API_KEY:-}" ] && ENV_VARS="${ENV_VARS}@HARVARD_API_KEY=${HARVARD_API_KEY}"
 [ -n "${SMITHSONIAN_API_KEY:-}" ] && ENV_VARS="${ENV_VARS}@SMITHSONIAN_API_KEY=${SMITHSONIAN_API_KEY}"
 

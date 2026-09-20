@@ -42,6 +42,7 @@ jobs:
           GCP_PROJECT: ${{ vars.GCP_PROJECT }}
           REGION: ${{ vars.GCP_REGION }}
           CORS_ORIGINS: ${{ vars.CORS_ORIGINS }}
+          CORS_ORIGIN_REGEX: ${{ vars.CORS_ORIGIN_REGEX }}
           HARVARD_API_KEY: ${{ secrets.HARVARD_API_KEY }}
           SMITHSONIAN_API_KEY: ${{ secrets.SMITHSONIAN_API_KEY }}
         run: ./deploy/cloud-run/deploy.sh
