@@ -23,6 +23,8 @@ app = FastAPI(lifespan=lifespan)
 
 # The frontend calls this API directly from the browser, so it needs CORS —
 # see CORS_ORIGINS in .env.example. GET-only since that's the whole surface.
+# CORS_ORIGIN_REGEX additionally admits origins by pattern (e.g. per-branch
+# preview subdomains); Starlette full-matches it, and unset means exact-only.
 _cors_origins = [
     origin.strip()
     for origin in os.environ.get(
@@ -33,6 +35,7 @@ _cors_origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
+    allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or None,
     allow_methods=["GET"],
     allow_headers=["*"],
 )

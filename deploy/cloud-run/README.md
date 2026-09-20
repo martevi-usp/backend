@@ -116,6 +116,7 @@ Actions), create an environment named `production` and set:
 | Variable | `GCP_WORKLOAD_IDENTITY_PROVIDER` | `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github/providers/github` |
 | Variable | `GCP_SERVICE_ACCOUNT` | `martevi-deployer@PROJECT.iam.gserviceaccount.com` |
 | Variable | `CORS_ORIGINS` | the frontend's origin |
+| Variable (optional) | `CORS_ORIGIN_REGEX` | regex for extra allowed origins, e.g. `^https://([a-z0-9-]+-)?frontend\.ACCOUNT\.workers\.dev$` for Workers previews; keep it anchored and scoped to your account |
 | Variable (optional) | `GCP_REGION` | defaults to `us-central1` |
 | Secret (optional) | `HARVARD_API_KEY`, `SMITHSONIAN_API_KEY` | your keys |
 
