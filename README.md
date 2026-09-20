@@ -197,3 +197,16 @@ target and bind-mounts `src/` for live reload.
 
 `.github/workflows/ci.yml` runs ruff, mypy (non-blocking for now), pytest,
 and a production Docker build on every push/PR to `main`.
+
+## Deploy
+
+The backend runs on Google Cloud Run. Everything about deploying lives in
+[`deploy/cloud-run/README.md`](deploy/cloud-run/README.md):
+
+- **Manual deploy** — one-time project setup, then
+  `GCP_PROJECT=… CORS_ORIGINS=… ./deploy/cloud-run/deploy.sh`.
+- **Continuous deployment** — `.github/workflows/deploy.yml` deploys after CI
+  passes on `main`. Its one-time setup (keyless Google auth, the GitHub
+  `production` environment, the variables and secrets it reads) is the
+  README's [Continuous deployment](deploy/cloud-run/README.md#continuous-deployment)
+  section.
