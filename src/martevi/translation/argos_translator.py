@@ -1,7 +1,20 @@
 import asyncio
 import threading
 
-import argostranslate.translate as argos_translate
+try:
+    import argostranslate.translate as argos_translate
+except ModuleNotFoundError as exc:
+    _ARGOS_IMPORT_ERROR = exc
+
+    class _ArgosTranslateUnavailable:
+        @staticmethod
+        def translate(*args, **kwargs):
+            raise ModuleNotFoundError(
+                "argostranslate is required to run translations. "
+                "Install argostranslate (with its runtime setup) before using ArgosTranslator."
+            ) from _ARGOS_IMPORT_ERROR
+
+    argos_translate = _ArgosTranslateUnavailable()
 
 # Argos Translate has no pt-BR/pt-PT distinction — just "pt". Accepted as a
 # known simplification (same spirit as this project's other documented
