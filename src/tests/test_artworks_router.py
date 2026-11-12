@@ -236,6 +236,19 @@ def test_stream_reports_a_failing_provider_without_dropping_others(make_test_cli
     assert [event for event, _ in events][-1] == "done"
 
 
+def test_browse_reports_a_failing_provider_instead_of_returning_500(make_test_client):
+    client = make_test_client({"aic": FakeProvider("aic", error=RuntimeError("403 Forbidden"))})
+
+    response = client.get("/artworks", params={"provider_id": "aic"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["results"] == []
+    assert body["provider_status"] == [
+        {"provider_id": "aic", "ok": False, "count": 0, "error": "403 Forbidden"}
+    ]
+
+
 def test_stream_requires_q(make_test_client):
     client = make_test_client({})
 

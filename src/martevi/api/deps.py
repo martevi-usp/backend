@@ -2,6 +2,7 @@ import os
 import sqlite3
 from collections.abc import Iterator
 
+import httpx
 from fastapi import HTTPException, Request
 
 from martevi.providers.base import MuseumProvider
@@ -16,6 +17,10 @@ from martevi.repositories.sqlite import connect_readonly
 
 def get_registry(request: Request) -> dict[str, MuseumProvider]:
     return request.app.state.registry
+
+
+def get_http_client(request: Request) -> httpx.AsyncClient:
+    return request.app.state.http_client
 
 
 DEFAULT_DB_PATH = "/opt/martevi/martevi.db"
