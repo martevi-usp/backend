@@ -1,13 +1,23 @@
+import os
+
 import httpx
 
 from martevi.schema import Artwork, ArtworkSummary
 
 _BASE = "https://api.artic.edu/api/v1"
 _SEARCH_FIELDS = "id,title,date_display,image_id,dimensions_detail"
+# AIC asks API users to identify themselves with this header (ideally with a
+# contact address); set AIC_USER_AGENT to override the default.
+_DEFAULT_AIC_USER_AGENT = "martevi-backend/0.1 (educational museum project)"
 _ITEM_FIELDS = (
     "id,title,date_display,dimensions_detail,medium_display,department_title,"
     "short_description,description,image_id"
 )
+
+
+def aic_headers() -> dict[str, str]:
+    """Identifying header AIC requires — on its API and on its IIIF image server."""
+    return {"AIC-User-Agent": os.environ.get("AIC_USER_AGENT") or _DEFAULT_AIC_USER_AGENT}
 
 
 class AicProvider:
@@ -17,11 +27,13 @@ class AicProvider:
 
     def __init__(self, client: httpx.AsyncClient) -> None:
         self._client = client
+        self._headers = aic_headers()
 
     async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
         response = await self._client.get(
             f"{_BASE}/artworks/search",
             params={"q": query, "limit": limit, "fields": _SEARCH_FIELDS},
+            headers=self._headers,
         )
         response.raise_for_status()
         payload = response.json()
@@ -36,6 +48,7 @@ class AicProvider:
         response = await self._client.get(
             f"{_BASE}/artworks",
             params={"page": page, "limit": limit, "fields": _SEARCH_FIELDS},
+            headers=self._headers,
         )
         response.raise_for_status()
         payload = response.json()
@@ -48,7 +61,9 @@ class AicProvider:
 
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(
-            f"{_BASE}/artworks/{external_id}", params={"fields": _ITEM_FIELDS}
+            f"{_BASE}/artworks/{external_id}",
+            params={"fields": _ITEM_FIELDS},
+            headers=self._headers,
         )
         if response.status_code == 404:
             return None
@@ -107,5 +122,13 @@ class AicProvider:
         image_id = data.get("image_id")
         if not image_id or not iiif_url:
             return None, None, None
-        base = f"{iiif_url}/{image_id}"
-        return f"{base}/full/full/0/default.jpg", f"{base}/full/200,/0/default.jpg", base
+        # AIC's image server only answers requests carrying the AIC-User-Agent
+        # header, which a browser <img> can't send — so displayable image URLs
+        # point at our own /images/aic proxy (relative; the client resolves them
+        # against the API base). The IIIF base stays upstream for deep-zoom use.
+        proxy = f"/images/aic/{image_id}"
+        return (
+            f"{proxy}/full/full/0/default.jpg",
+            f"{proxy}/full/200,/0/default.jpg",
+            f"{iiif_url}/{image_id}",
+        )

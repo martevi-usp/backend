@@ -36,7 +36,8 @@ async def test_get_item_normalizes_cm_dimensions_and_constructs_iiif_and_source_
     assert artwork.culture is None  # AIC has no culture-equivalent field
     assert artwork.description == "A short curatorial summary."
     image_id = "e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9"
-    assert artwork.image_url == f"{_IIIF_URL}/{image_id}/full/full/0/default.jpg"
+    assert artwork.image_url == f"/images/aic/{image_id}/full/full/0/default.jpg"
+    assert artwork.thumbnail_url == f"/images/aic/{image_id}/full/200,/0/default.jpg"
     assert artwork.image_zoom_url == f"{_IIIF_URL}/{image_id}"
     assert artwork.source_url == "https://www.artic.edu/artworks/129884"
 
@@ -132,3 +133,12 @@ async def test_browse_drops_items_with_no_image(respx_mock, async_client):
     results = await provider.browse(limit=20, offset=0)
 
     assert [r.id for r in results] == ["aic:2"]
+
+
+async def test_requests_send_the_aic_user_agent_header(respx_mock, async_client, monkeypatch):
+    monkeypatch.setenv("AIC_USER_AGENT", "martevi-test (test@example.org)")
+    route = respx_mock.get(_ITEM_URL).mock(return_value=httpx.Response(200, json=_ITEM))
+
+    await AicProvider(async_client).get_item("129884")
+
+    assert route.calls.last.request.headers["AIC-User-Agent"] == "martevi-test (test@example.org)"

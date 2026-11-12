@@ -5,6 +5,9 @@ from martevi.providers._internal.text import blank_to_none
 from martevi.schema import Artwork, ArtworkSummary
 
 _BASE = "https://collectionapi.metmuseum.org/public/collection/v1"
+# /v1/search was retired on 2026-10-01 (it returned every matching id in one
+# response); /v1.1/search is Elastic-backed and paginated via offset/limit.
+_SEARCH_URL = "https://collectionapi.metmuseum.org/public/collection/v1.1/search"
 
 
 class MetProvider:
@@ -18,7 +21,7 @@ class MetProvider:
     async def search(self, query: str, limit: int = 20) -> list[ArtworkSummary]:
         # NOTE: Met's search endpoint returns object IDs only, no summary data — every
         # result needs a full get_item() call. Caching is out of scope per ADR-0001.
-        response = await self._client.get(f"{_BASE}/search", params={"q": query})
+        response = await self._client.get(_SEARCH_URL, params={"q": query, "limit": limit})
         response.raise_for_status()
         object_ids = response.json().get("objectIDs") or []
         return await gather_optional(
@@ -26,20 +29,23 @@ class MetProvider:
         )
 
     async def browse(self, limit: int = 20, offset: int = 0) -> list[ArtworkSummary]:
-        # Met's curated, guaranteed-to-have-an-image highlight set (confirmed live:
-        # ~2,100 objects) — `q` is still required by the endpoint, but a common
-        # single letter combined with these two filters matches effectively all of
-        # it, same trick `search()`'s zero-result path never needs since a query is
-        # always given there. The full id list comes back in one call; slice for
-        # the page instead of a second network round-trip.
+        # Met's curated, guaranteed-to-have-an-image highlight set (~2,000
+        # objects) — `q` is still required by the endpoint, but a common single
+        # letter combined with these two filters matches effectively all of it.
+        # v1.1 paginates server-side, so the page is requested directly.
         response = await self._client.get(
-            f"{_BASE}/search",
-            params={"q": "a", "isHighlight": "true", "hasImages": "true"},
+            _SEARCH_URL,
+            params={
+                "q": "a",
+                "isHighlight": "true",
+                "hasImages": "true",
+                "limit": limit,
+                "offset": offset,
+            },
         )
         response.raise_for_status()
         object_ids = response.json().get("objectIDs") or []
-        page_ids = object_ids[offset : offset + limit]
-        return await gather_optional(self.get_item(str(object_id)) for object_id in page_ids)
+        return await gather_optional(self.get_item(str(object_id)) for object_id in object_ids)
 
     async def get_item(self, external_id: str) -> Artwork | None:
         response = await self._client.get(f"{_BASE}/objects/{external_id}")

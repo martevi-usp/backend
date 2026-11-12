@@ -1,4 +1,5 @@
 import json
+import logging
 from collections.abc import AsyncIterator
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -9,6 +10,8 @@ from martevi.providers._internal.concurrency import gather_optional
 from martevi.providers.base import MuseumProvider
 from martevi.providers.fanout import fan_out_search, stream_fan_out_search
 from martevi.schema import Artwork, ArtworkSummary, FanOutSearchResult, ProviderSearchStatus
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/artworks", tags=["artworks"])
 
@@ -33,17 +36,30 @@ async def search_artworks(
     if provider is None:
         raise HTTPException(404, f"Unknown provider_id: {provider_id!r}")
 
-    if q is None:
-        # Query-less browse — a page of the collection, shown before anyone
-        # searches. `department` filtering needs a search to filter, so it isn't
-        # supported in browse mode.
-        if department is not None:
-            raise HTTPException(400, "department requires q")
-        results = await provider.browse(limit, offset)
-    elif department is None:
-        results = await provider.search(q, limit)
-    else:
-        results = await _search_filtered_by_department(provider, q, limit, department)
+    # An upstream failure (blocked, retired endpoint, missing key) is reported
+    # per provider like the fan-out does, not as a 500 for the whole request.
+    try:
+        if q is None:
+            # Query-less browse — a page of the collection, shown before anyone
+            # searches. `department` filtering needs a search to filter, so it isn't
+            # supported in browse mode.
+            if department is not None:
+                raise HTTPException(400, "department requires q")
+            results = await provider.browse(limit, offset)
+        elif department is None:
+            results = await provider.search(q, limit)
+        else:
+            results = await _search_filtered_by_department(provider, q, limit, department)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("provider %s failed: %s", provider_id, exc)
+        return FanOutSearchResult(
+            results=[],
+            provider_status=[
+                ProviderSearchStatus(provider_id=provider_id, ok=False, error=str(exc))
+            ],
+        )
 
     status = ProviderSearchStatus(provider_id=provider_id, ok=True, count=len(results))
     return FanOutSearchResult(results=results, provider_status=[status])

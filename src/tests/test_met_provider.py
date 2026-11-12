@@ -2,7 +2,7 @@ import httpx
 
 from martevi.providers.adapters.met import MetProvider
 
-_SEARCH_URL = "https://collectionapi.metmuseum.org/public/collection/v1/search"
+_SEARCH_URL = "https://collectionapi.metmuseum.org/public/collection/v1.1/search"
 _OBJECT_URL = "https://collectionapi.metmuseum.org/public/collection/v1/objects/436535"
 
 _OBJECT = {
@@ -71,10 +71,9 @@ async def test_browse_uses_highlight_and_has_images_filters(respx_mock, async_cl
     assert route.calls.last.request.url.params["hasImages"] == "true"
 
 
-async def test_browse_slices_the_id_list_by_offset_before_fetching(respx_mock, async_client):
-    object_ids = list(range(100000, 100010))  # 10 ids
-    respx_mock.get(_SEARCH_URL).mock(
-        return_value=httpx.Response(200, json={"total": 10, "objectIDs": object_ids})
+async def test_browse_paginates_server_side_with_limit_and_offset(respx_mock, async_client):
+    route = respx_mock.get(_SEARCH_URL).mock(
+        return_value=httpx.Response(200, json={"total": 1982, "objectIDs": [100005, 100006]})
     )
     fetched_ids: list[str] = []
 
@@ -86,6 +85,9 @@ async def test_browse_slices_the_id_list_by_offset_before_fetching(respx_mock, a
     respx_mock.get(url__regex=r".*/objects/\d+$").mock(side_effect=_respond)
     provider = MetProvider(async_client)
 
-    await provider.browse(limit=3, offset=5)
+    await provider.browse(limit=2, offset=5)
 
-    assert fetched_ids == [str(i) for i in object_ids[5:8]]
+    params = route.calls.last.request.url.params
+    assert params["limit"] == "2"
+    assert params["offset"] == "5"
+    assert sorted(fetched_ids) == ["100005", "100006"]

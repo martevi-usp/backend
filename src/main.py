@@ -5,7 +5,13 @@ import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from martevi.api import artworks_router, health_router, puzzles_router, tours_router
+from martevi.api import (
+    artworks_router,
+    health_router,
+    images_router,
+    puzzles_router,
+    tours_router,
+)
 from martevi.providers.registry import build_registry
 
 
@@ -15,6 +21,7 @@ async def lifespan(app: FastAPI):
     # httpx's default "python-httpx/..." User-Agent — send an identifying one.
     headers = {"User-Agent": "martevi-backend/0.1 (+https://github.com/martevi-usp/martevi)"}
     async with httpx.AsyncClient(timeout=10.0, headers=headers) as client:
+        app.state.http_client = client
         app.state.registry = build_registry(client)
         yield
 
@@ -42,5 +49,6 @@ app.add_middleware(
 
 app.include_router(health_router)
 app.include_router(artworks_router)
+app.include_router(images_router)
 app.include_router(puzzles_router)
 app.include_router(tours_router)
